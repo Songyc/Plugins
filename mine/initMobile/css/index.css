@@ -1,0 +1,142 @@
+/*reset 合并到自己的css中去 */
+body,dl,dd,ul,ol,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,p,hr,thead,tbody,tfoot,th,td{margin:0;padding:0;}
+ul,ol{list-style:none;}
+a{text-decoration:none;color:#333333;}
+a:hover{color:#333333;}
+a:visited{color:#333333;}
+html{-ms-text-size-adjust:none;-webkit-text-size-adjust:none;text-size-adjust:none;font-size:62.5%;}
+body{font-size:14px;line-height:1.5em;color:#333333;}
+body,button,input,select,textarea{font-family:'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;}
+b,strong{font-weight:bold;}
+i,em{font-style:normal;}
+table{border-collapse:collapse;border-spacing:0;}
+table th,table td{border:1px solid #ddd;padding:5px;}
+table th{font-weight:inherit;border-bottom-width:2px;border-bottom-color:#ccc;}
+img{border:0 none;width:auto\9;max-width:100%;vertical-align:top;}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0;vertical-align:baseline;}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;}
+button[disabled],input[disabled]{cursor:default;}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0;}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+input{line-height:normal!important;}
+}
+select[size],select[multiple],select[size][multiple]{border:1px solid #AAA;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block;}
+audio,canvas,video,progress{display:inline-block;}
+@media only screen and (min-width:1025px){.body{max-width:320px}}
+.hide{display:none!important;}
+
+.swiper-slide {position:relative;}
+.swiper-slide img{position:absolute;display:none;}
+.swiper-slide.f-animate img{display:block;}
+
+.next{background: url(../images/next.png);width:28px;height:16px;background-size:28px;  position: absolute;  bottom: 2%;left: 50%;margin-left: -14px;}
+.next.animate{-webkit-animation:nextPage 1.5s ease-in-out 1s alternate none infinite;}
+
+/*page1*/
+
+/*跳舞*/
+@-webkit-keyframes shake {
+	0%{-webkit-transform:scale(1) translate(0, 5px) rotate(0deg);}
+	33%{-webkit-transform:scale(1) translate(0, -5px) rotate(-5deg);}
+	66%{-webkit-transform:scale(1) translate(0, -5px) rotate(10deg);}
+	100%{-webkit-transform:scale(1) translate(0, 5px) rotate(0deg);}
+}
+/*飘浮*/
+@-webkit-keyframes piaofu {
+  0% {-webkit-transform: translateX(-5px);}
+  50% { -webkit-transform: translateX(5px);}
+  100% { -webkit-transform: translateX(-5px);}
+}
+/*由大变小*/
+@-webkit-keyframes poster{
+	0%{-webkit-transform:scale(9);opacity:0;}
+	100%{-webkit-transform:scale(1);opacity:1;}
+}
+/*上下浮动*/
+@-webkit-keyframes nextPage {
+    0% {-webkit-transform:translate(0px, 0px);}
+    50% {-webkit-transform:translate(0px, -5px);}
+    100% {-webkit-transform:translate(0px, 0px);}
+}
+
+/*淡入*/
+@-webkit-keyframes fadeIn {
+	0%{opacity: 0;}
+	100%{opacity: 1;}
+}
+/*淡出*/
+@-webkit-keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
+}
+
+/*摇摇晃*/
+@-webkit-keyframes bounceIn {
+	0% {opacity: 0;-webkit-transform: scale(.3);}
+	50% {opacity:1;-webkit-transform: scale(1.05);}
+	70% {-webkit-transform: scale(.9);}
+	100% {opacity: 1;-webkit-transform: scale(1);}
+}
+/*大变小*/
+@-webkit-keyframes smaller {
+	0% {opacity: 0;-webkit-transform: scale(9);}
+	100% {opacity: 1;-webkit-transform: scale(1);}
+}
+/*小变大*/
+@-webkit-keyframes bigger {
+	0% {opacity: 0;-webkit-transform: scale(.1);}
+	100% {opacity: 1;-webkit-transform: scale(1);}
+}
+/*顺时针旋转*/
+@-webkit-keyframes rotate {
+	0% {-webkit-transform: rotate(0deg);}
+ 	100% {-webkit-transform: rotate(360deg);}
+}
+
+/*左边淡入*/
+@-webkit-keyframes fromLeft {
+	0% {opacity: 0;-webkit-transform: translate(-100%, 0);}
+	100% {opacity: 1;-webkit-transform: translate(0, 0);}
+}
+/*右边淡入*/
+@-webkit-keyframes fromRight {
+	0% {opacity: 0;-webkit-transform: translate(100%, 0);}
+	100% {opacity: 1;-webkit-transform: translate(0, 0);}
+}
+/*上边淡入*/
+@-webkit-keyframes fromTop {
+	0% {opacity: 0;-webkit-transform: translate(0, -100%);}
+	100% {opacity: 1;-webkit-transform: translate(0, 0);}
+}
+/*下边淡入*/
+@-webkit-keyframes fromBottom {
+	0% {opacity: 0;-webkit-transform: translate(0, 100%);}
+	100% {opacity: 1;-webkit-transform: translate(0, 0);}
+}
+/*放大*/
+@keyframes scaleUp {
+	0%{transform:scale(0.5,0.5);}
+	100%{transform:scale(1,1);}
+}
+
+/*从上飞下来*/
+@-webkit-keyframes bounceInDown{
+  0%,100%,60%,75%,90%{-webkit-transition-timing-function:cubic-bezier(0.215,.61,.355,1);transition-timing-function:cubic-bezier(0.215,.61,.355,1)}
+  0%{opacity:0;-webkit-transform:translate3d(0,-3000px,0);transform:translate3d(0,-3000px,0)}
+  60%{opacity:1;-webkit-transform:translate3d(0,25px,0);transform:translate3d(0,25px,0)}
+  75%{-webkit-transform:translate3d(0,-10px,0);transform:translate3d(0,-10px,0)}
+  90%{-webkit-transform:translate3d(0,5px,0);transform:translate3d(0,5px,0)}
+  100%{-webkit-transform:none;transform:none;opacity:1}
+}
+
+/*头尾晃动*/
+@-webkit-keyframes jungle2{
+  20%{-webkit-transform:rotate3d(0,0,1,0deg);-webkit-transition:-webkit-transform 1s ease;}
+  40%{-webkit-transform:rotate3d(0,0,1,5deg);-webkit-transition:-webkit-transform 1s ease;}
+  60%{-webkit-transform:rotate3d(0,0,1,0deg);-webkit-transition:-webkit-transform 1s ease;}
+  80%{-webkit-transform:rotate3d(0,0,1,-5deg);-webkit-transition:-webkit-transform 1s ease;}
+  100%{-webkit-transform:rotate3d(0,0,1,0deg);-webkit-transition:-webkit-transform 1s ease;}
+}

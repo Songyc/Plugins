@@ -1,0 +1,218 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>无标题文档</title>
+</head>
+<style>
+	body{margin:0;padding:0;}
+	.doc{width:100%;height:1000px;position:relative;background:green;}
+	.wrapper{margin:0 auto;width:1000px;position:relative;top:200px;background:green;}
+	.hk,.am,.tw,.rb,.hg,.plane{width: 50px;height: 50px;background:red;position:absolute;text-align:center;color:#fff;line-height:50px;}
+	.plane{width:30px;height:30px;background:yellow;left:100px;top:0;line-height:30px;font-size: 12px;color: #000;z-index:10;}
+	.hk{top:120px;left:200px;}
+	.am{top:140px;left:300px;}
+	.tw{top:300px;left:450px;}
+	.rb{top:50px;left:600px;}
+	.hg{top:0px;left:750px;}
+</style>
+<body>
+	<div class="doc">
+		<div class="wrapper">
+			<div class="plane">飞机</div>
+			<div class="hk">香港</div>
+			<div class="am">澳门</div>
+			<div class="tw">台湾</div>
+			<div class="rb">日本</div>
+			<div class="hg">韩国</div>
+		</div>
+	</div>
+	<script>
+	(function (win){
+		var doc = document,
+			oWrapper = doc.getElementsByClassName('wrapper')[0],
+			oPlane = doc.getElementsByClassName('plane')[0],
+			oHk = doc.getElementsByClassName('hk')[0],
+			oAm = doc.getElementsByClassName('am')[0],
+			oTw = doc.getElementsByClassName('tw')[0],
+			oRb = doc.getElementsByClassName('rb')[0];
+			oHg = doc.getElementsByClassName('hg')[0];
+		// function
+		var getPos = function (obj){
+			var getPosObj = obj.getBoundingClientRect(),
+				cliWidth = (doc.docElement || doc.body).clientLeft,
+				cliTop = (doc.docElement || doc.body).clientTop;
+			return {
+				left: getPosObj.left - cliWidth,
+				top: getPosObj.top - cliTop,
+				right: getPosObj.right,
+				bottom: getPosObj.bottom
+			}
+		},
+		getRePos = function (obj){
+			return {
+				left: obj.offsetLeft,
+				top: obj.offsetTop
+			}
+		},
+		getCenter = function (obj){
+			var posObj = getPos(obj),
+				cenLeft = posObj.left + Math.round(obj.offsetHeight/2),
+				cenTop = posObj.top +　Math.round(obj.offsetWidth/2);
+			return {
+				cenLeft: cenLeft,
+				cenTop: cenTop
+			}
+		},
+		getAngelAndLen = function (obj1, obj2){
+			var cen1 = getCenter(obj1),
+				cen2 = getCenter(obj2);
+				diffX = cen2.cenLeft - cen1.cenLeft,
+				diffY = cen2.cenTop - cen1.cenTop;
+			return {
+				angel: Math.round((Math.atan2(diffX, diffY)*180)/Math.PI),
+				len: Math.ceil(Math.sqrt(diffX*diffX+diffY*diffY)),
+				diffX: diffX,
+				diffY: diffY
+			}
+		},
+		getOffPos = function (obj, plane) {
+			return {
+				left: obj.offsetLeft+Math.round(obj.offsetWidth/2)-plane.offsetWidth/2,
+				top: obj.offsetTop+Math.round(obj.offsetHeight/2)-plane.offsetHeight/2
+			}
+		}
+		createLine = function (obj, angel){
+			var line = document.createElement('div');
+				line.style.border = '1px solid #000';
+				line.style.width = angel.len;
+				line.style.position = 'absolute';
+				line.style.left = getCenter(obj).cenLeft - getPos(oWrapper).left; 
+				line.style.top = getCenter(obj).cenTop - getPos(oWrapper).top;
+				line.style.webkitTransform  = 'rotate('+(90-angel.angel)+'deg)';
+				line.style.webkitTransformOrigin = '0 0';
+				line.style.MozTransform  = 'rotate('+(90-angel.angel)+'deg)';
+				line.style.MozTransformOrigin = '0 0'
+			oWrapper.insertBefore(line, obj);
+		}
+
+		var arr =[oPlane,oHk, oAm, oTw, oRb, oHg];
+
+		for(var i = 0, l = arr.length; i < l; i++){
+			if(i !== l-1){
+				createLine(arr[i], getAngelAndLen(arr[i], arr[i+1]));
+			}
+		}
+		oHk.onclick = function (){
+			// moveStart(arr[0],{type:"linear",attr:{
+			// 	left:getOffPos(arr[1], arr[0]).left,
+			// 	top:getOffPos(arr[1], arr[0]).top
+			// }});
+			moveStart('plane',{
+				left: getOffPos(arr[1], arr[0]).left,
+				top: getOffPos(arr[1], arr[0]).top,
+				onDraw: function (){
+					console.log(123);
+				}
+			});
+		}
+		oAm.onclick = function (){
+			moveStart(arr[0],{type:"linear",attr:{
+				left:getOffPos(arr[2], arr[0]).left,
+				top:getOffPos(arr[2], arr[0]).top
+			}});
+		}
+		oTw.onclick = function (){
+			moveStart(arr[0],{type:"linear",attr:{
+				left:getOffPos(arr[3], arr[0]).left,
+				top:getOffPos(arr[3], arr[0]).top
+			}});
+		}
+	})(window);
+	</script>
+	<script>
+	// JavaScript Document
+	(function () {
+		var doc = document,
+			tar,
+			extend = function (target, source){
+				for(var k in source){
+					target[k] = source[k];
+				}
+				return target;
+			},
+			getStyle = function (obj, name){
+				return obj.currentStyle ? obj.currentStyle[name] : getComputedStyle(obj, false)[name];
+			},
+			moveStart = function (obj, option){
+				var def = {
+					left: 0,
+					top: 0,
+					type: 'linear'
+				},
+				left,
+				top,
+				leftSpeed,
+				topSpeed,
+				time = 2/0.03,
+				// speed = 3,
+				isEnd = isLeftEnd = isTopEnd = false,
+				_this = this,
+				options = extend(def, option);
+				tar = doc.getElementsByClassName(obj)[0];
+				this.options = options;
+				this.tar = tar;
+
+				var curLeft = tar.offsetLeft,
+					curTop = tar.offsetTop,
+					tarLeft = options.left,
+					tarTop = options.top,
+					disLeft = tarLeft - curLeft,
+					disTop = tarTop - curTop;
+					leftSpeed = disLeft/time;
+					topSpeed = disTop/time;
+				if(tar.timer) clearInterval(tar.timer);
+				tar.timer = setInterval(function (){
+					// 匀速运动
+					curLeft = tar.offsetLeft;
+					curTop = tar.offsetTop;
+					disLeft = tarLeft - curLeft;
+					disTop = tarTop - curTop;
+					// 定义速度
+					if(tarLeft >= curLeft) {
+						leftSpeed = leftSpeed;
+					}else{
+						leftSpeed = -leftSpeed;
+					}
+					if(tarTop >= curTop) {
+						topSpeed =topSpeed;
+					}else{
+						topSpeed = -topSpeed;
+					}
+					// 是否到终点
+					if(Math.abs(disLeft) <= leftSpeed){
+						tar.style.left = tarLeft +'px';
+						isLeftEnd = true;
+					}else{
+						tar.style.left = curLeft + leftSpeed + "px";
+					}
+					if(Math.abs(disTop) <= topSpeed){
+						tar.style.top = tarTop +'px';
+						isTopEnd = true;
+					}else{
+						tar.style.top = curTop + topSpeed + "px";
+					}
+
+					if(isLeftEnd && isTopEnd) isEnd = true;
+
+					if(isEnd) {
+						clearInterval(tar.timer);
+						if(options.onDraw) options.onDraw.call(this);
+					}
+				}, 30);
+			}
+		window.moveStart = moveStart;
+	})();
+	</script>
+</body>
+</html>

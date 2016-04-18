@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>calendar</title>
+	<style>
+	div {
+		text-align: center;
+	}
+	.myFirstCal {
+		border: 1px solid #ccc;
+		font-size: 11pt;
+		padding: 3px;
+		background: -webkit-linear-gradient(#fff 0%, #fff 20%, #4797de 50%, #ccc 80%, #fff 100%) !important;
+		background: -moz-linear-gradient(#fff 0%, #fff 20%, #4797de 50%, #ccc 80%, #fff 100%) !important;
+		background: -ms-linear-gradient(#fff 0%, #fff 20%, #4797de 50%, #ccc 80%, #fff 100%) !important;
+		background: -o-linear-gradient(#fff 0%, #fff 20%, #4797de 50%, #ccc 80%, #fff 100%) !important;
+		background: linear-gradient(#fff 0%, #fff 20%, #4797de 50%, #ccc 80%, #fff 100%) !important;
+	}
+	.calRow {
+		display: -webkit-box;
+		display: box;
+		-webkit-box-orient: horizontal;
+	}
+	.calRow>div, .calRow>p, .calRow>li, .calRow>input {
+		-webkit-box-flex: 1.0;
+		box-flex: 1.0;
+		width: 20%;
+	}
+	.headerRow, .day {
+		line-height: 25px;
+	}
+	.headerRow {
+		line-height: 30px;
+	}
+	.myFirstCal>.myCalendar {
+		width: auto;
+		border: 2px solid #ccc;
+		box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	}
+	.dayRow {
+		background: rgba(79, 153, 79, 0.9);
+	}
+	.calHeader {
+		position: relative;
+		height: 18px;
+	}
+	.lastYear,.nextYear,.lastMonth,.nextMonth {
+		position: relative;
+		text-align: center;
+		font-weight: bold;
+	}
+	.lastYear {
+		/*left: 10%;*/
+		width: 10%;
+	}
+	.nextYear {
+		/*right: 10%;*/
+		width: 20%;
+	}
+	.lastMonth {
+		/*left: 20%;*/
+		width: 10%;
+	}
+	.nextMonth {
+		/*right: 20%;*/
+		width: 20%;
+	}
+	div .year,div .month {
+		width: 30%;
+	}
+	.dateTime {
+		/*width: 60%;*/
+		text-align: left;
+		color: ;
+		padding-top: 4px;
+	}
+	.timeName {
+		width: 36px;
+		display: inline-block;
+		text-align: left;
+	}
+	.calTime {
+		/*width:80%; */
+		border: 1px solid #ccc;
+		display: inline-block;
+		padding: 2px 5px;
+		box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	}
+	.calTime>input{
+		width: 20px;
+		border: 0px;
+		padding-left: 5px;
+	}
+	.myCal-button {
+		display: -webkit-box;
+		display: box;
+		padding:4px 0px 2px 0px; 
+	}
+	.myCal-button div {
+		background: #ccc;
+		border: 2px solid #ccc;
+		box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+		-webkit-box-flex: 1.0;
+		box-flex: 1.0;
+		width: 20%;
+		border-radius: 3px;
+	}
+	.day:active {
+		background: green;
+	}
+	.boxShadow {
+		box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	}
+	.myCal-clear, .myCal-today {
+		margin-right: 10px;
+	}
+	.lastYear:active, .lastMonth:active, .nextMonth:active, .nextYear:active {
+		background: rgba(0, 0, 0, 0.2);
+	}
+	</style>
+</head>
+<body>
+	 <input type = "text" id = "myCalendar"/>
+	<script>
+	var Calendar = {
+		 	today: new Date(),
+		 	year: new Date().getFullYear(),			//年
+		 	month: new Date().getMonth(),			//月
+		 	date: new Date().getDate(),				//日
+		 	day: new Date().getDay(),				//星期
+		 	hours: new Date().getHours(),			//时
+		 	minutes: new Date().getMinutes(),		//分
+		 	seconds: new Date().getSeconds(),		//秒
+		 	_Y_year: new Date().getFullYear(),
+		 	_M_month: new Date().getMonth() + 1,
+		 	_D_day: null,
+		 	// 判断润年
+		 	isLeap: function () {
+		 		var _year = this._Y_year;
+		 		if(_year % 4 === 0 && _year % 100 > 0) {
+		 			return true ;
+		 		}
+		 		if(_year % 400 === 0 && _year % 3200 > 0) {
+		 			return true ;
+		 		}
+		 		return false ;
+		 	},
+		 	// 获取月的天数
+		 	dayLen: function () {
+		 		var _month = this._M_month ;
+		 		if(_month === 2) {
+		 			if(this.isLeap()) return 28;
+		 			return 29;
+		 		}
+		 		if(_month < 8 && _month % 2 === 1) {
+		 			return 31;
+		 		}
+		 		if(_month >= 8 && _month % 2 === 0) {
+		 			return 31;
+		 		}
+		 		return 30 ;
+		 	},
+		 	// 隐藏日历
+		 	hideCal: function () {
+		 		var myFirstCal = document.getElementsByClassName("myFirstCal")[0];
+		 		myFirstCal.style.display = "none";
+		 	},
+		 	// 获取日期
+		 	getDay: function (e) {
+		 		var _this = this;
+		 		var day = document.getElementsByClassName("day");
+				// _this.getDay(this);
+		 		var value ;
+				if(0 < (+e.innerHTML) < 32) {
+					value = e.innerHTML;
+				}else{
+					value = _this.date;
+				}
+				_this._D_day = value;
+		 		// return value;
+		 	},
+		 	// 转格式
+		 	zero: function (target) {
+		 		// 如果是0，返回00
+		 		if(target + "" == "0" || target + "" == "00") {
+		 			return "00";
+		 		}
+		 		// 如果是1位数,则加0
+		 		if((target+ "").indexOf("0") !== 0) {
+		 			target = +target < 10 ? "0" + target : target;
+		 		}
+		 		// 大于60等于60就给00
+		 		if(+target >= 60 || +target < 0){
+		 			return "00";
+		 		}
+		 		// 如果填英文或者其它的给00
+		 		if(/[a-zA-Z\s]+/.test(+target)) {
+		 			return "00";
+		 		}
+		 		return target;
+		 	},
+		 	// 如果时间大于实际显示红色
+		 	redValue: function () {
+		 		var _this = this;
+		 		var hours = document.getElementsByClassName("myCal-hours")[0];
+		 		var minutes = document.getElementsByClassName("myCal-minutes")[0];
+		 		var seconds = document.getElementsByClassName("myCal-seconds")[0];
+		 		hours.onkeyup = function () {
+		 			var hoursValue = hours.value;
+		 			if(/^\d\d?/.test(hoursValue +"") && +hoursValue >= 0 && +hoursValue <= 12)  {
+		 				hours.style.color = "#000";
+		 			}else{
+		 				hours.style.color = "red";
+		 			} 
+		 		}
+		 		seconds.onkeyup = minutes.onkeyup = function () {
+		 			var thisValue = this.value;
+		 			if(/^\d\d?/.test(thisValue +"") && +thisValue >= 0 && +thisValue < 60) {
+		 				this.style.color = "#000";
+		 			}else{
+		 				this.style.color = "red";
+		 			}  
+		 		}
+		 	},
+		 	// 确定
+		 	myCalConfirm: function (e) {
+		 		// 如果不在0-12就给00,在就返回
+		 		var hoursTime = document.getElementsByClassName("myCal-hours")[0].value;
+		 		hoursTime = +hoursTime > 12 || +hoursTime < 0 ? hoursTime = "00" : hoursTime;
+		 		var hours = this.zero(hoursTime || document.getElementsByClassName("myCal-hours")[0].placeholder);
+		 		// 如果不在0-60就给00,在就返回
+		 		var minutesTime = document.getElementsByClassName("myCal-minutes")[0].value;
+		 		minutesTime = +minutesTime > 60 || +minutesTime < 0 ? minutesTime = "00" : minutesTime;
+		 		var minutes = this.zero(minutesTime || document.getElementsByClassName("myCal-minutes")[0].placeholder);
+		 		// 如果不在0-60就给00,在就返回
+		 		var secondsTime = document.getElementsByClassName("myCal-seconds")[0].value;
+		 		secondsTime = +secondsTime > 60 || +secondsTime < 0 ? secondsTime = "00" : secondsTime;
+		 		var seconds = this.zero(secondsTime || document.getElementsByClassName("myCal-seconds")[0].placeholder);
+		 		var year = document.getElementsByClassName("year")[0].innerHTML.match(/^\d+/)[0];
+		 		var month = this.zero(document.getElementsByClassName("month")[0].innerHTML.match(/^\d+/));
+		 		var day = this.zero(this._D_day || this.date);
+		 		var totalTime = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+		 		this.hideCal();
+		 		this.clearTime();
+		 		return totalTime;
+		 	},
+		 	// 今天 
+		 	myCalToday: function () {
+		 		var hours = this.zero(document.getElementsByClassName("myCal-hours")[0].placeholder);
+		 		var minutes = this.zero(document.getElementsByClassName("myCal-minutes")[0].placeholder);
+		 		var seconds = this.zero(document.getElementsByClassName("myCal-seconds")[0].placeholder);
+		 		var year = this.year;
+		 		var month = this.month+1;
+		 		var day = this.date;
+		 		var today = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+		 		this.hideCal();
+		 		this.clearTime();
+		 		return today;
+		 	},
+		 	// 清空时分秒
+		 	clearTime: function () {
+		 		document.getElementsByClassName("myCal-hours")[0].value = "";
+		 		document.getElementsByClassName("myCal-minutes")[0].value = "";
+		 		document.getElementsByClassName("myCal-seconds")[0].value = "";
+		 	},
+		 	// 清空
+		 	myCalClear: function () {
+		 		this.hideCal();
+		 		this.clearTime();
+		 		return "";
+		 	},
+		 	// 添加头部
+		 	header: function () {
+		 		var str = "";
+		 		str += '<div class = "calRow headerRow"><div class = "lastYear">\<\<</div><div class = "lastMonth">\<</div><div class = "year">'+this._Y_year+'</div><div class = "month">'+this._M_month+'</div><div class = "nextMonth">\></div><div class = "nextYear">\>\></div></div>';
+		 		return str;
+		 	},
+		 	// 添加时分秒
+		 	dateTime: function () {
+		 		var str = "";
+		 		str += '<div class = "dateTime"><div class = "timeName " >时间</div><div class = "calTime"><input type = "text" class = "myCal-hours" maxlength = "2" placeholder = '+ this.zero(this.hours)+' /><span>:</span><input type = "text" class = "myCal-minutes" maxlength = "2" placeholder = '+this.zero(this.minutes)+' /><span>:</span><input type = "text" class = "myCal-seconds" maxlength = "2" placeholder ='+ this.zero(this.seconds)+' /></div></div>';
+		 		return str;
+		 	},
+		 	// 添加清空，今天，确定
+		 	confirm: function () {
+		 		var str = "";
+		 		str += '<div class = "myCal-button"><div class = "myCal-clear" style = "">清空</div><div class = "myCal-today" style = "">今天</div><div class = "myCal-confirm" style = "">确定</div></div>';
+		 		return str;
+		 	},
+		 	// 初始化时分秒
+		 	initDateTime: function () {
+				document.getElementsByClassName("myCal-hours")[0].value = this.zero(this.hours);
+				document.getElementsByClassName("myCal-minutes")[0].value = this.zero(this.minutes);
+				document.getElementsByClassName("myCal-seconds")[0].value = this.zero(this.seconds);
+		 	},
+		 	//  加载日历
+		 	getCalendar: function () {
+		 		var len =  this.dayLen();
+		 		var d = (new Date(this._Y_year,this._M_month-1,1)).getDay();       //今月的第一天是星期几
+		 		var arr = [];
+		 		var start = 0;
+		 		var str;
+		 		for(var i = 0; i < 7; i++) {
+		 			arr[i] = [];
+		 			for(var j = 0; j < 7; j++) {
+		 				if(i == 0) {
+		 					arr[i][j] = "日一二三四五六".charAt(j);
+		 				}else{
+		 					start ++ ;
+			 				var fill = start - d;
+			 				if(fill > 0 && fill < len + 1) {
+			 					arr[i][j] = fill;
+			 				}else{
+			 					arr[i][j] = "&nbsp;";
+			 				}
+		 				}
+		 			}
+		 		}
+		 		console.log(arr, len);
+		 		str = '<div class = "myCalendar" style = "width: auto;">';
+		 		// str += this.header();
+		 		arr.forEach(function (value, index, arr) {
+		 			if(index == 0) {
+		 				str += '<div class = "calRow dayRow">' + '<div class = "day">';
+		 			}else{
+		 				str += '<div class = "calRow dateRow">' + '<div class = "day">';
+		 			}
+		 			
+		 			if(value[0] == "&nbsp;" && index == 6) {
+		 				str += '</div></div>';
+		 			}else{
+		 				str += value.join('</div><div class = "day">');
+		 				str += '</div></div>';
+		 			}
+		 		});
+		 		str += "</div>";
+		 		return str;
+		 	},
+		 	lastYear: function () {
+				this._Y_year--; 		
+		 	},
+		 	nextYear: function () {
+		 		this._Y_year++;
+		 	},
+		 	lastMonth: function () {
+				if(this._M_month == 1) {this._Y_year--;this._M_month = 12;}
+				else{this._M_month--;};
+		 	},
+		 	nextMonth: function () {
+		 		if(this._M_month == 12) {this._Y_year++;this._M_month = 1;}
+		 		else{this._M_month++;};
+		 	},
+		 	hasInit: function () {
+		 		var myFirstCal = document.getElementsByClassName("myFirstCal");
+		 		if(myFirstCal.length) {
+		 			return true;
+		 		}
+		 	},
+		 	// 高亮,遇到空白不亮
+		 	highlight: function () {
+		 		var _this = this;
+		 		var day = document.getElementsByClassName("day");
+		 		
+		 		for(var i = 0; i < day.length; i++) {
+		 			// 今天高亮
+					day[i].onclick = function () {
+
+						for(var j = 0; j < day.length; j++) {
+							day[j].style.backgroundColor = "transparent";
+							day[j].style.color = "#000";
+						}
+						// 遇到空白不亮
+						if(this.innerHTML == "&nbsp;") {
+							this.style.backgroundColor = "transparent";
+						}else{
+						// 高亮
+						this.style.backgroundColor = "rgba(79, 153, 79, 0.9)";
+						this.style.color = "#fff";
+						}
+						// 点击日期
+						_this.getDay(this);
+					}
+				}
+		 	},
+		 	// 今天高亮
+		 	todayHighLight: function () {
+		 		var _this = this;
+		 		var day = document.getElementsByClassName("day");
+				for(var i = 0; i < day.length; i++) {
+					if(_this.date == day[i].innerHTML) {
+		 				day[i].style.backgroundColor = "rgba(79, 153, 79, 0.9)";
+		 				day[i].style.color = "#fff";
+		 			}  
+	 			}
+		 	},
+		 	init: function (e) {
+		 		var _this = this;
+		 		var myFirstCal = document.getElementsByClassName("myFirstCal")[0];
+		 		if(myFirstCal) {
+		 			return ;
+		 		}
+		 		var oDiv = document.createElement("div");
+				oDiv.className = "myFirstCal";
+				oDiv.innerHTML = Calendar.header() + Calendar.getCalendar() + Calendar.dateTime() + Calendar.confirm();
+				document.body.appendChild(oDiv);
+
+				var myCalendar = document.getElementsByClassName("myCalendar")[0];
+				var year = document.getElementsByClassName("year")[0];
+				var month = document.getElementsByClassName("month")[0];
+				var myFirstCal = document.getElementsByClassName("myFirstCal")[0];
+				var lastYear = document.getElementsByClassName("lastYear")[0];
+				var nextYear = document.getElementsByClassName("nextYear")[0];
+				var lastMonth = document.getElementsByClassName("lastMonth")[0];
+				var nextMonth = document.getElementsByClassName("nextMonth")[0];
+				var clear = document.getElementsByClassName("myCal-clear")[0];
+				var today = document.getElementsByClassName("myCal-today")[0];
+				var confirm = document.getElementsByClassName("myCal-confirm")[0];
+
+				lastYear.onclick = function () {
+					Calendar.lastYear();
+					year.innerHTML = Calendar._Y_year ;
+					month.innerHTML = Calendar._M_month ;
+					myCalendar.innerHTML = Calendar.getCalendar();
+					_this.highlight();
+				}
+				nextYear.onclick = function () {
+					Calendar.nextYear();
+					year.innerHTML = Calendar._Y_year ;
+					month.innerHTML = Calendar._M_month ;
+					myCalendar.innerHTML = Calendar.getCalendar();
+					_this.highlight();
+				}
+				lastMonth.onclick = function () {
+					Calendar.lastMonth();
+					year.innerHTML = Calendar._Y_year ;
+					month.innerHTML = Calendar._M_month ;
+					myCalendar.innerHTML = Calendar.getCalendar();
+					_this.highlight();
+				}
+				nextMonth.onclick = function () {
+					Calendar.nextMonth();
+					year.innerHTML = Calendar._Y_year ;
+					month.innerHTML = Calendar._M_month ;
+					myCalendar.innerHTML = Calendar.getCalendar();
+					_this.highlight();  								//高亮
+				}
+				clear.onclick = function () {
+					e.value = _this.myCalClear();
+				}
+				today.onclick = function () {
+					e.value = _this.myCalToday();
+				}
+				confirm.onclick = function () {
+					e.value = _this.myCalConfirm(e);
+				}
+				// 高亮
+				_this.highlight();
+				// 今天高亮
+				_this.todayHighLight();
+				_this.redValue();
+		 	},
+		}
+		var oInput = document.getElementById("myCalendar");
+			oInput.onclick = function () {
+				if(Calendar.hasInit()) {
+					var myFirstCal = document.getElementsByClassName("myFirstCal")[0];
+					// 隐藏时点击才出现高亮
+					if(myFirstCal.style.display !== "block") {
+						myFirstCal.style.display = "block";
+						Calendar.todayHighLight();
+					}
+				}else{
+					Calendar.init(this);	
+				}
+			}
+	</script>
+</body>
+ 
+</html>

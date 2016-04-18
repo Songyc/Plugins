@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style>
+	body{margin:0;height: 1000px;background:pink;}
+	#drag{width:100px;height:100px;background:red;position:absolute;}
+	#parent{background: green;width: 500px;height: 500px;border: 1px solid;margin: 50px;position:relative;}
+	</style>
+	<script>
+	// window.onload = function (){
+	// 	var doc = document,
+	// 		drag = doc.getElementById("drag"),
+	// 		disX,
+	// 		disY;
+	// 	drag.onmousedown = function (){
+	// 		// var ev = event;
+	// 		disX = event.clientX + drag.scrollLeft - this.offsetLeft;
+	// 		disY = event.clientY + drag.scrollTop - this.offsetTop;
+	// 		document.onmousemove = function (){
+	// 			drag.style.left = event.clientX + drag.scrollLeft - disX + "px";
+	// 			drag.style.top = event.clientY + drag.scrollTop - disY + "px";
+	// 		}
+	// 		document.onmouseup = function (){
+	// 			document.onmousemove = null;
+	// 			document.onmouseup = null;
+	// 		}
+	// 		return false;
+	// 	}
+	// }
+	</script>
+</head>
+<body>
+	<div id="parent">
+		<div id="drag"></div>	
+	</div>
+	
+	<script src="myDrag.js"></script>
+	<script>
+	new myDrag("#drag",{
+		left: "20%" || "100px" || 100,
+		right: "20%",
+		bottom: "20%",
+		top: "20%",
+		parentNode:document.getElementById("parent"),
+		parentWidth:'40%',
+		parentHeight:'50%',
+		onDraw: function (){
+			if(this.x > 0.5*(document.documentElement || document.body).clientWidth){console.log(13333);}
+		}
+	});
+	</script>
+</body>
+</html>

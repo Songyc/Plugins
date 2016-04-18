@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>移动模板</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<script type="text/javascript">
+if(/Android (\d+\.\d+)/.test(navigator.userAgent)){
+    var version = parseFloat(RegExp.$1);
+    if(version>2.3){
+        var phoneScale = parseInt(window.screen.width)/640;
+        document.write('<meta name="viewport" content="width=640, minimum-scale = '+ phoneScale +', maximum-scale = '+ phoneScale +', target-densitydpi=device-dpi">');
+    }else{
+        document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+    }
+}else{
+    document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi,minimal-ui">');
+}
+</script>
+<style>
+*{margin:0;padding:0;}
+img{display:none;}
+.f-animate img{display:block;}
+/*page1*/
+.f-animate .p1t2{-webkit-animation: fadeInBottomTotal 1.5s ease 1.5s both;}
+.f-animate .p1t3{-webkit-animation: fadeInBottomTotal 1.5s ease 1.5s both;}
+.f-animate .p1t4{-webkit-animation: fadeInBottomTotal 1.5s ease 1.5s both;}
+.f-animate .p1t1{-webkit-animation: fadeInBottomTotal 0.5s ease 0s both;}
+.f-animate .p1t6{-webkit-animation: bounceInDown 0.5s ease 1.5s both;}
+.f-animate .p1t7{-webkit-animation: bounceInDown 0.5s ease 1.5s both;}
+.f-animate .p1t8{-webkit-animation: bounceInDown 0.5s ease 1.5s both;}
+.f-animate .p1t9{-webkit-animation: scaleUp 2s ease 3s both infinite;}
+.f-animate .p1t10{-webkit-animation: scaleUp 2s ease 3s both infinite;}
+.f-animate .p1t11{-webkit-animation: fadeIn 2s ease 1.5s both;}
+.f-animate2 .p1t8{-webkit-animation: shake 1s ease 0s both infinite;-webkit-transform-origin:center;}
+.f-animate2 .p1t11{-webkit-animation: scaleUp 2s ease 1s both infinite;}
+/*page2*/
+.f-animate .p2t1{-webkit-animation: fadeInRight 0.5s ease 0s both;}
+.f-animate .p2t2{-webkit-animation: bounceInDown 0.5s ease 0.5s both;}
+.f-animate .p2t4{-webkit-animation: fadeInLeft 0.5s ease 1s both;}
+.f-animate .p2t3{-webkit-animation: bounceInDown 0.5s ease 1.5s both;}
+.f-animate .p2t6{-webkit-animation: poster 1s ease-in-out 2s both;}
+.f-animate .p2t7{-webkit-animation: fadeIn 1s ease 4.5s both;}
+.f-animate .p2t5{-webkit-animation:fadeIn 2s ease 3.5s both;}
+.f-animate .p2t8{-webkit-animation:fadeIn 1s ease 4.5s both;}
+
+.f-animate2 .p2t7{-webkit-animation:shake 0.5s ease 1s both 3;}
+@-webkit-keyframes poster{
+	0%{-webkit-transform:scale(9);opacity:0;}
+	100%{-webkit-transform:scale(1);opacity:1;}
+}
+/*左边淡入*/
+@-webkit-keyframes fadeInLeft {
+	0% {
+		opacity: 0;-webkit-transform: translate(-100%, 0);
+	}
+	100% {
+		opacity: 1;-webkit-transform: translate(0, 0);
+	}
+}
+/*右边淡入*/
+@-webkit-keyframes fadeInRight {
+	0% {
+		opacity: 0;-webkit-transform: translate3d(100%, 0, 0);
+	}
+	100% {
+		opacity: 1;-webkit-transform: translate3d(0, 0, 0);
+	}
+}
+/*淡入*/
+@-webkit-keyframes fadeIn {
+	0%{opacity: 0;}
+	100%{opacity: 1;}
+}
+
+@-webkit-keyframes shake {
+	0%{-webkit-transform:scale(1) translate(0, 5px) rotate(0deg);}
+	33%{-webkit-transform:scale(1) translate(0, -5px) rotate(-5deg);}
+	66%{-webkit-transform:scale(1) translate(0, -5px) rotate(10deg);}
+	100%{-webkit-transform:scale(1) translate(0, 5px) rotate(0deg);}
+}
+
+/*下边淡入Total*/
+@-webkit-keyframes fadeInBottomTotal {
+	0% {
+		opacity: 0;-webkit-transform: translate3d(0, 500px, 0);
+	}
+	100% {
+		opacity: 1;-webkit-transform: translate3d(0, 0, 0);
+	}
+}
+/*从上飞下来*/
+@-webkit-keyframes bounceInDown{
+  0%,100%,60%,75%,90%{-webkit-transition-timing-function:cubic-bezier(0.215,.61,.355,1);transition-timing-function:cubic-bezier(0.215,.61,.355,1)}
+  0%{opacity:0;-webkit-transform:translate3d(0,-3000px,0);transform:translate3d(0,-3000px,0)}
+  60%{opacity:1;-webkit-transform:translate3d(0,25px,0);transform:translate3d(0,25px,0)}
+  75%{-webkit-transform:translate3d(0,-10px,0);transform:translate3d(0,-10px,0)}
+  90%{-webkit-transform:translate3d(0,5px,0);transform:translate3d(0,5px,0)}
+  100%{-webkit-transform:none;transform:none;opacity:1}
+}
+/*放大*/
+@-webkit-keyframes scaleUp {
+	0%{
+		-webkit-transform:scale3d(0.5,0.5,1);
+	}
+	100%{
+		-webkit-transform:scale3d(1,1,1);
+	}
+}
+
+</style>
+</head>
+<body>
+	<div class="g-doc" style="background:#fed9eb;">
+	    <!-- header -->
+		<div class="header">
+			
+		</div>
+		<!-- /header -->
+
+		<!-- wraper -->
+	    <div class="wraper">
+	    	<div class="swiper-container" id="swiper-container">
+	    		<div class="swiper-wrapper">
+	    			<div class="swiper-slide page1">
+		    			<img src="images/p1t1.png" class="p1t1" alt="">
+		    			<img src="images/p1t2.png" class="p1t2" alt="">
+		    			<img src="images/p1t3.png" class="p1t3" alt="">
+		    			<img src="images/p1t4.png" class="p1t4" alt="">
+		    			<img src="images/p1t5.png" class="p1t5" alt="">
+		    			<img src="images/p1t6.png" class="p1t6" alt="">
+		    			<img src="images/p1t7.png" class="p1t7" alt="">
+	    				<img src="images/p1t8.png" class="p1t8" alt="">	
+	    				<img src="images/p1t9.png" class="p1t9" alt="">
+	    				<img src="images/p1t10.png" class="p1t10" alt="">	
+	    				<img src="images/p1t11.png" class="p1t11" alt="">
+	    			</div>
+	    			<div class="swiper-slide page2">
+		    			<img src="images/p2t1.png" class="p2t1" alt="">
+		    			<img src="images/p2t2.png" class="p2t2" alt="">
+		    			<img src="images/p2t3.png" class="p2t3" alt="">
+		    			<img src="images/p2t4.png" class="p2t4" alt="">
+		    			<img src="images/p2t5.png" class="p2t5" alt="">	
+		    			<img src="images/p2t6.png" class="p2t6" alt="">
+		    			<img src="images/p2t7.png" class="p2t7" alt="">
+		    			<img src="images/p2t8.png" class="p2t8" alt="">
+	    			</div>
+	    		</div>
+	    	</div>
+	    </div>
+	</div>
+	<script src="js/initMobilePage.js"></script>
+	
+	<script>
+	var fAnimate = function (obj, time, cla) {
+		setTimeout(function () {
+			obj.classList.add(cla);
+		}, time * 1000);
+	};
+
+	var swiperSlides = document.querySelectorAll('.swiper-slide'),
+		fAnimateTime = [2, 4.5];	//每个页串连动画延迟时间
+
+	var setInitMobilePage = function () {
+		new initMobilePage({
+			setHeight: true,	//计算手机的屏幕大小
+			setPhoneScale: false,	// 计算手机的屏宽比例
+			setPreload: {		// 移动端预加载图片
+				1: "images/p1t1.png",
+				2: "images/p1t2.png",
+				3: "images/p1t3.png",
+				4: "images/p1t4.png",
+				5: "images/p1t5.png"
+			},
+			setMusic: !{		// 背景音乐
+				src: "really.mp3",
+				img: "images/music.png",
+				autoPlay: true,
+				loop: true,
+				controls: false
+			},
+			setImgPos: true,	//计算图片尺寸
+			callback: function () {		//回调函数
+				swiperSlides[0].classList.add('f-animate');
+				fAnimate(swiperSlides[0], fAnimateTime[0], 'f-animate2');// 串连动画
+			},
+			setIScroll: { 
+				target: 'swiper-container',
+				snap: document.querySelectorAll('.swiper-slide'),
+	    		momentum: false,
+	    		onScrollEnd: function () {
+	    			var	currPage = swiperSlides[this.currPageY],
+	    				fanimate = document.querySelector('.f-animate'),
+	    				fanimate2 = document.querySelector('.f-animate2')
+	    			if(fanimate) fanimate.classList.remove('f-animate');
+	    			if(fanimate2) fanimate2.classList.remove('f-animate2');
+	    			currPage.classList.add('f-animate');
+	    			fAnimate(currPage, fAnimateTime[this.currPageY], 'f-animate2');
+	    		}
+			},
+			/*分享到微信*/
+			setWeiXin: function () {
+			    wxApi.init(function () {
+			        var shareData = {
+			            title: '时尚小心机，美宝莲渐变咬唇妆！',// 分享标题
+			            desc:'今年夏天最in的唇色你get到了吗！美宝莲好气色轻唇膏咬唇妆火热来袭！',// 分享描述
+			            link: 'http://www1.pclady.com.cn/zt/wap/sh20150626/maybelline/',// 分享链接
+			            imgUrl: 'images/fx.png',// 分享图标
+			        };
+			        wx.onMenuShareAppMessage(shareData);// 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+			        wx.onMenuShareTimeline(shareData);// 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+			        wx.onMenuShareQQ(shareData);// 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+			        wx.onMenuShareWeibo(shareData);// 监听“分享到微博”按钮点击、自定义分享内容及分享结果接口
+			    });
+			}
+		});
+	}
+	setInitMobilePage();
+	</script>
+</body>
+</html>

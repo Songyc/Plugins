@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3, minimum-scale=1.0,user-scalable=no,minimal-ui">
+<style>
+	body{margin:0 auto;padding:0 auto;}
+	.tab-ctrl {position: absolute; right: -29px; top:200px; z-index: 19; width: 356px; height: 344px; left: 50%; margin-left: -178px; margin-bottom: -150px; -webkit-transform-origin: 178px 172px; transform-origin: 178px 172px; background: url(img/wheel1.png) no-repeat; background-size: contain; overflow: hidden;-webkit-transform-origin:50% 50%;}
+	.doc{position:relative;overflow:hidden;max-width:640px;margin:0 auto;}
+	.m-card{position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 3;}
+	/*.m-card>div{position: absolute;width: 69%; left: 16%; top: 12%;} */
+	.m-card>div{position:absolute;width:100%;height:100%;}
+	</style>
+</head>
+<body>
+<div class="doc">
+	<div class="m-card" id="Jflip">
+		<div class="person first">
+			<img width="100%" height="100%" alt="" src="img/00.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/01.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/02.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/03.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/04.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/05.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/06.jpg" />
+		</div>
+		<div class="person">
+			<img width="100%" height="100%" alt="" src="img/07.jpg" />
+		</div>
+	</div>
+	<div class="tab-ctrl" id="Jtab_ctrl"></div>
+</div>
+<script>
+	var width = document.documentElement.clientWidth,
+		height = document.documentElement.clientHeight,
+		oDoc = document.getElementsByClassName("doc")[0];
+	oDoc.style.width = width + "px";	
+	oDoc.style.height = height +"px";
+	document.getElementsByClassName('person')[0].style.zIndex = 1;
+</script>
+
+<!-- =================== 转盘控件Dial =================== -->
+<script src="js/dial.js"></script>
+
+<script>
+	var arr = 1;
+	var myDial = new Dial('#Jtab_ctrl',{
+		initAngle: 0,	//开始的旋转角度,缺省值为0。
+		eachRotateAngle: 45,	//最初每次的旋转角度,缺省值为45。
+		blockNumber: 8,	//旋转分块,缺省值为8。
+		blockNumberIndex: true, //是否按照分块的下标,缺省值为true
+		origin:"50% 50%", // 旋转中心,缺省值为"50% 50%"。
+		onDraw: function () {
+			var oJflip = document.getElementById('Jflip'),
+				aPerson = oJflip.getElementsByClassName('person'),
+				aImg = oJflip.getElementsByTagName('img');
+				index = this.curIndex,
+				arr += 1;
+				console.log(this);
+			for(var i = 0, l = aPerson.length; i < l; i++) {
+				aPerson[index].style.zIndex = arr;
+			}
+		}
+	});
+</script>
+</body>
+</html>

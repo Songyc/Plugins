@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	.__console__{}
+	.console-title{border:1px solid #a3a3a3;background:#dfdfdf;}
+	.console-content{}
+	.console-border{ width:15px; height:20px; position: absolute; left:-15px;}
+	.console-border-tri1{border:5px solid transparent; border-left:5px solid #769fe6; position: absolute; left:3px; top:6px;}
+	.console-border-tri2{border:5px solid transparent; border-left:5px solid #fff; position: absolute; left:0px; top:6px;}
+	.console-data{margin-left:15px;position:relative;}
+	.console-data input{color:#6d6d6d;	 width: 100%;border:none;}
+	</style>
+</head>
+<body>
+	<!-- <div id="__console__" class="__console__"> -->
+		<!-- <div class="console-title">console</div> -->
+		<!-- <div class="console-content"> -->
+			<!-- <div class="console-data">
+				<div class="console-border">
+					<div class="console-border-tri1"></div>
+					<div class="console-border-tri2"></div>
+				</div>
+				<input type="text" class="console-input">
+			</div>
+			<div class="console-data">
+				<div class="console-border">
+					<div class="console-border-tri1"></div>
+					<div class="console-border-tri2"></div>
+				</div>
+				<input type="text" class="console-input">
+			</div> -->
+		<!-- </div> -->
+	<!-- </div> -->
+<script>
+// console.js
+// 
+(function (window, undefined) {
+	var global = {},
+		arr = [],
+		$ = {},
+		consoleInfo = "IE6 Console",
+		doc = window.document;
+
+	var	_toString = Object.prototype.toString,
+		_hasOwn = Object.prototype.hasOwnProperty,
+		_slice =[].slice,
+		_substring = ''.substring,
+		_forEach = [].forEach;
+
+	var IS_QUERYSELECTOR = !!doc.querySelector,
+		IS_GETELEMENTSBYCLASSNAME = !!doc.getElementByTagName,
+		IS_FOREACH = !![].forEach,
+		ISIE = window.attachEvent ? true : false,
+		IS_IE6 = (function (){
+			// IE6, FF2+会屏敝自定义继承属性
+			var property;
+			for(property in {"toString": 0})
+				if(!{"toString": 0}[property])
+					return false;
+			return true;
+		})(),
+		IS_IE678 = window.attachEvent && typeof window.addEventListener === undefined;
+	// global.extend = function (destination, source) {
+	// 	var args = _slice.call(arguments),
+	// 		// sources = _slice.call(args, 1),
+	// 		i = 1,
+	// 		len = args.length,
+	// 		isExt = typeof args.pop() === 'boolean' ? args.pop() : true;
+	// 	if(len === 1) return destination;
+
+	// 	return destination;
+	// }	
+
+	$.extend = function (destination, source) {
+		var args = _slice.call(arguments),
+			i = 1, property,
+			len = args.length;
+			isCover = typeof(args[len - 1]) === 'boolean' ? args.pop() : true;
+		if(len === 1) 
+			return destination;
+		while(source = args[i++])
+			for(property in source) 
+				if(!(property in destination) || isCover) 
+					destination[property] = source[property];
+		return destination;
+	}	
+	// console.log(global.extend({"0": 0}, {"1": 1}, true));
+
+	// 种子模块 
+	$.extend($, {
+		isType: function (obj) {
+			var string = _toString.call(obj),
+				type = _substring.call(string).slice(8, -1).toLowerCase();
+			return type;
+		},
+		isNaN: function (obj) {
+			return obj !== obj
+		},
+		isArray: function (obj) {
+			return $.isType(obj) === 'array';
+		},
+		makeArray: function (iterable) {
+		  	var ret = [];
+		  	var slow = function () {
+			   	var len = iterable.length;
+			   	while(len)
+			    	ret[--len] = iterable[len];
+			   	return ret;
+		  	}
+		  	if(!iterable) 
+		  		return [];
+		  	// 排除string, function, window等, 它们也有length的属性
+		  	if(typeof iterable === 'string' || typeof iterable === 'function' || iterable.setInterval)
+		   		return ret[0] = iterable;
+		  	// IE6,IE7下HTMLCollection, NodeList不是Object的子类。
+		  	return (iterable.item && HTMLCollection instanceof Object) ? slow.apply(this, arguments) : ret.slice.call(iterable);
+		 },
+		isLikeArray: function (obj) {
+		  	var len = obj.length;
+		  	// Element元素
+		  	if(obj.nodeType === 1 && len)
+		   		return true;
+		  	if(obj && typeof obj === 'object') {
+		   		var	str = Object.prototype.toString.call(obj);
+			   	// 数组, Arguments, 对象有正整数length属性
+			   	if(/Array|Arguments/.test(str) || str.indexOf('Object') > -1 && (len >= 0 && !(len % 1)))
+			    	return true;
+		  	}
+		  	return false;
+	 	},
+		isPlainObject: function (obj) {
+		 	// 排除DOM, DOM节点, window, ActiveXObject实例
+		 	if(typeof obj !== 'object' || obj.nodeType || obj.setInterval || obj instanceof ActiveXObject)
+	   			return false;
+	 		return true;
+		},
+		domContentLoaded: function (fn) {
+			var isDomReady = false,
+				init = (function () {
+					if(!isDomReady) {
+						isDomReady = true;
+						fn();
+					}
+				})();
+			// IE
+			if(ISIE) {
+				// for an iframe
+				doc.attachEvent("onreadystatechange",
+				function() {
+					if (doc.readyState === "complete") {
+						doc.detachEvent("onreadystatechange", arguments.callee);
+						init();
+					}
+				});
+				// not an iframe 
+				// Diego Perini 05/10/2007
+				// http://javascript.nwbox.com/IEContentLoaded/
+				if (doc.documentElement.doScroll && typeof window.frameElement === "undefined"){
+					(function () {
+						if(isDomReady)
+							return;
+						try{
+							doc.documentElement.doScroll('left');
+						}catch(e){
+							setTimeout(arguments.callee);
+							return;
+						}
+						init();
+					})();
+				}
+				// 还没赶上就监听window.onload
+				// jQuery
+				window.attachEvent("onload", function () {
+					window.detachEvent("onload", arguments.callee);
+					init();
+				})
+			}
+			// 非IE
+			else{
+				// 首先监听onreadystatechange, 兼容没有DOMContentedLoaded的非IE浏览器,
+				if(doc.addEventListener) 
+					doc.addEventListener("onreadystatechange",
+					function () {
+						if(doc.readyState === "complete") {
+							doc.removeEventListener("onreadystatechange", arguments.callee, false);
+							init();
+						}
+					}, false);
+				// 监听DOMContentedLoaded Firefox2、Firefox3、Safari3.1+、Opera9.6+
+				doc.addEventListener("DOMContentLoaded", function () {
+					doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
+					init();
+				}, false);
+				// 还没赶上就监听window.onload
+				// jQuery
+				window.addEventListener("load", function () {
+					window.removeEventListener("load", arguments.callee, false);
+					init();
+				}, false);
+			}	
+		}
+	});
+
+	// 类模块,类方法模块
+	$.extend($, {
+		// 类继承
+		inherit: function (des, source) {
+			var F = function () {};
+			F.prototype = source.prototype;
+			des.prototype = new F();
+			des.prototype.constructor = des;
+			return des;
+		},
+		// 数组遍历
+		each: function (obj, fn) {
+			if(!$.isArray(obj))
+				return;
+			var slow = function (fn) {
+				var i = 0, l = obj.length;
+				for(; i < l; i++) 
+					fn.apply(obj[i], arguments);
+			}
+			IS_FOREACH ? _forEach.call(obj, fn) : slow.call(obj, obj[i], i, obj);
+		},
+		// 遍历对象
+		forIn: function (obj) {
+
+		}
+	});
+
+	// Dom模块
+	$.extend($, {
+		getClass: function(cla, obj) {
+			var slow = function (cla) {
+				var arr = [],
+					i = 0,
+					all = this.getElementsByTagName('*'),
+					len = all.length;
+				for(; e = all[i++]; )
+					if(e.className === cla) arr.push(e); 
+				return arr;
+			}
+			return IS_GETELEMENTSBYCLASSNAME ? (obj || doc).getElementsByClassName(cla) : slow.apply((obj || doc), arguments);
+		},
+		addEventListener: function (obj, type, fn, useCapture, one) {
+			var dom = obj || doc,
+				useCap = useCapture || false,
+				once = one || 1;
+			// W3C
+			if(dom.addEventListener) {
+				dom.addEventListener(type, function () {	
+					if(once)
+						dom.removeEventListener(type, arguments.callee, useCap);
+					fn.apply(this, arguments);
+				}, useCap);
+			}
+			// 兼容IE6, IE7, IE8
+			else if(ISIE){
+				dom.attachEvent('on' + type, function () {
+					if(once)
+						dom.detachEvent('on' + type, arguments.callee);
+					fn.apply(this, arguments);
+				});	
+			}
+		}
+	});
+
+	// 组合对象类
+	var Composite = function () {}
+
+	Composite.prototype = {
+		init: function () {
+			this.appendChild(this.child);
+			return this.getElement();
+		},
+		add: function (child) {
+			this.container.push(child);
+		},
+		remove: function (child) {
+			var len = this.container.length;
+			while(len)
+				if(this.container[--len] === child) {
+					this.container.splice(len, 1);
+					break;
+				}
+		},
+		getChild: function (index) {
+			return this.container[index];
+		},
+		getElement: function (child) {
+			return this.element;
+		},
+		appendChild: function (child) {
+			var i = 0, e;
+			for(; e = child[i++];){
+				this.add(e);
+				this.element.appendChild(e.getElement());
+				e.init();	
+			}
+		},
+		save: function () {
+
+		}
+	}
+
+	var CompositeConsole = function () {
+		this.className = '__console__';
+		this.container = [];
+		this.element = doc.createElement('div');
+		this.element.className = this.className;
+		this.child = [new FieldTitle(), new CompositeContent()];
+	}
+	// 继承组合类
+	$.inherit(CompositeConsole, Composite);
+
+	var CompositeContent = function () {
+		this.className = 'console-content';
+		this.container = [];
+		// 初始化创建,否则直接获取
+		this.element = (function () {
+			var obj = $.getClass('console-content'),
+				len = obj === 'undefined' ? 0 : obj.length;
+			return len ? obj[0] : doc.createElement('div');
+		})();
+
+		this.element.className = this.className;
+		this.child = [new CompositeData()];
+	}
+	// 继承组合类
+	$.inherit(CompositeContent, Composite);
+	
+	// 组合对象Data类
+	var CompositeData = function () {
+		this.container = [];
+		this.className = 'console-data';
+		this.element = doc.createElement('div');
+		this.element.className = this.className;
+		this.child = [new CompositeData_border(), new FieldInput()];
+	}
+
+	$.inherit(CompositeData, Composite);
+
+	CompositeData.prototype.init = function () {
+		this.appendChild(this.child);
+		return this.getElement();
+	}
+
+	var CompositeData_border = function () {
+		this.container = [];
+		this.className = 'console-border';
+		this.element = doc.createElement('div');
+		this.element.className = this.className;
+		this.child = [new FieldData_border1(),new FieldData_border2()];
+	}
+
+	$.inherit(CompositeData_border, CompositeData);	
+
+	// 叶子对象类
+	var Field = function () {}
+
+	Field.prototype = {
+		init: function (){},
+		add: function () {},
+		remove: function () {},
+		getChild: function () {},
+		getElement: function () {return this.element; },
+		appendChild: function () {},
+		save: function () {}
+	}
+
+	var FieldTitle = function () {
+		this.container = [];
+		this.className = 'console-title';
+		this.element = doc.createElement('div');
+		this.element.className = this.className;
+		this.element.innerHTML = consoleInfo;
+	}
+
+	$.inherit(FieldTitle, Field);
+
+	var FieldData_border1 = function () {
+		this.container = [];
+		this.className = 'console-border-tri1';
+		this.element = doc.createElement('div');
+		this.element.className = this.className;
+	}
+
+	$.inherit(FieldData_border1, Field);
+
+	var FieldData_border2 = function () {
+		this.container = [];
+		this.className = 'console-border-tri2';
+		this.element = doc.createElement('div');
+		this.element.className = this.className;
+	}
+
+	$.inherit(FieldData_border2, Field);
+
+	var FieldInput = function () {
+		this.container = [];
+		this.className = 'console-input';
+		this.element = doc.createElement('input');
+		this.element.className = this.className;
+		this.element.type = 'text';
+	}
+
+	$.inherit(FieldInput, Field);
+
+	// 表达式类
+	var Expression = function () {
+
+	}
+
+	Expression.prototype = {
+		init: function (exp) {
+			var expstr = '' + exp +'; return ' + exp;
+			var func = new Function(expstr);
+			this.show(func());
+		}
+	}
+
+	// 用户键盘类
+	var EventKeyCode = {
+		BackSpace: 8,
+		Tab: 9,
+		Enter: 13,
+		Escape: 27,
+		End: 35,
+		Home: 36,
+		Left: 37,
+		Up: 38,
+		Right: 39,
+		Down: 40,
+		Delete: 46,
+
+		F1: 112,
+		F2: 113,
+		F3: 114,
+		F4: 115,
+		F5: 116,
+		F6: 117,
+		F7: 118,
+		F8: 119,
+		F9: 120,
+		F10: 121,
+		F11: 122,
+		F12: 123
+	}
+
+	var KeyBoard = function () {
+
+	}
+
+	KeyBoard.prototype = {
+		console: null,
+		// 初始化控制台
+		F2: function () {
+			var On_F2 = function (event) {
+				var ev = window.event || event,
+					self = this;
+				// F2打开控制台
+				if(ev.keyCode === EventKeyCode.F2) {
+					var console = self.console || new Console();
+					console.show();
+					if(!self.console) {
+						self.console = console;
+					}
+					console = null;
+				}
+			}
+			$.addEventListener(doc, 'keydown', On_F2 , false);
+		},
+		Enter: function () {
+			var On_Enter = function (event) {
+				var ev - window.event || event;
+				if(ev.keyCode === EventKeyCode.Enter) {
+					var console = self.console || new Console();
+					console.show();
+					if(!self.console) {
+						self.console = console;
+					}
+					console = null;
+				}	
+			}
+			$.addEventListener(doc, 'keydown', On_Enter , false);
+		}
+	}
+
+	// 初始化类
+	var Console = function () {
+			
+	}	 
+
+	Console.prototype = {
+		show: function () {
+			// 初始化compositeConsole节点
+			var compositeConsole = new CompositeConsole();
+			doc.body.appendChild(compositeConsole.init());
+		},
+		// 增加行
+		add: function () {
+			var compositeContent = new CompositeContent().init();
+		},
+		hide: function () {
+			
+		},
+		// 清除
+		clear: function () {
+
+		}
+	}
+
+	new KeyBoard().F2();
+
+	// var console = new Console();
+	// console.init();
+
+
+	// function focus() {
+	// 	var input = $.getClass("console-input")[0];
+	// 	input.focus();
+	// }
+	
+	// focus();
+
+	// function enter() {
+	// 	var aInput = $.getClass("console-input");
+	// 	$.each(aInput, function (ele, index, obj) {
+	// 		ele.onkeydown = function (event) {
+	// 			var e = event || window.event,
+	// 				value = ele.value;
+	// 			if(e && e.keyCode === 13) {		//enter
+	// 				var expression = new Expression();
+	// 				expression.init(value);
+	// 			}
+	// 		}
+	// 	});
+	// }
+
+	// enter();
+
+})(window);
+
+
+</script>
+</body>
+</html>

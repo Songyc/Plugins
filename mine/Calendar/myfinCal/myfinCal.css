@@ -1,0 +1,23 @@
+#myCalendar {
+	border: 1px solid;
+}
+.myCalendar, .myCal-btn{
+	width: 100%;
+}
+.myCal-btn {
+	border-bottom: 0px;
+}
+.day-row {
+	/*border-bottom: 1px solid #000; */
+}
+.myCal-row-btn {
+	/*width: 25%;*/
+}
+.myCal-row-date, .myCal-row-day, .myCal-row-btn {
+	text-align: center;
+	/*border-right: 1px solid;*/
+	/*border-bottom: 1px solid;*/
+}
+.myCal-time {
+	margin: 0 auto;
+}

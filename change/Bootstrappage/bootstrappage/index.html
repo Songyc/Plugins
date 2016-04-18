@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src = 'jquery-1.10.2.min.js'></script>
+	<link rel="stylesheet" href="jBootsrapPage.css">
+</head>
+<body>
+	<div style="padding-left:100px;">
+	    <h1>分页控件jBootstrapPage</h1>
+
+	    <input type="button" id="btn1" value="每页10条，3个按钮，共200条" />
+	      &nbsp;&nbsp;
+	    <input type="button" id="btn2" value="每页10条，5个按钮，共18条" />
+	      &nbsp;&nbsp;
+	    <input type="button" id="btn3" value="每页5条，12个按钮，共200条" />
+
+	    <p id="pageIndex" style="font-size:20px;font-weight:bold;color:blue;margin-left:150px;"></p>
+
+	    <ul class="pagination"></ul>
+    </div>
+    <script src = 'bootstrappage.js'></script>
+	<script>
+	$(function (){	
+		function createPage(pageSize, buttons, total) {
+			$(".pagination").jBootstrapPage({
+				pageSize : pageSize,
+	            maxPageButton:buttons,
+	            total : total
+			})
+		}
+		$('#btn1').click(function(){
+	        createPage(10, 3, 200);
+	    });
+
+	    $('#btn2').click(function(){
+	        createPage(10, 5, 60);
+	    });
+
+	    $('#btn3').click(function(){
+	        createPage(5, 12, 200);
+	    });
+	})	
+	</script>
+
+</body>
+</html>
