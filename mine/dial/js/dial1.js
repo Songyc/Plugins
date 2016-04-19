@@ -38,8 +38,15 @@
 	          	}
 	        }
 	        if(str.nodeType === 1 || str.nodeType === 9){
-	          eles.push(str);
+	        	 if(str.length) {
+		        	for(var i = 0, l = str.length; i < l; i++) {
+		        		eles.push(str[i]);
+		        	}
+		        }else{
+		      		eles.push(str);  	
+		        }
 	        }
+	       
 	    };
     $$.prototype = {
 	    constructor:$$,
@@ -108,6 +115,7 @@
 		eachRotateAngle = (eachRotateAngle !== (360 / blockNumber)) && blockNumberIndex ? 360 / blockNumber : eachRotateAngle;
 		return roNum * eachRotateAngle;
 	},
+
 	startHandler = function (e) {
 		var ev = e || window.event;
 		e.preventDefault();
@@ -120,20 +128,30 @@
 			startAngle = getAngleandLen(startClient,center);
 
 		global.center = center;
-		global.startClient = startClient;	
+		global.startClient = startClient;
 		
 		$(this).on(touchMove, moveHandler, false);
+
+		// var index = e.target.index;
+
+		// if(global.isMove !== undefined && !global.isMove) {
+		// 	$(e.target).on(touchEnd, function (e) {
+		// 		endHandler.call(this, e, index);
+		// 	}, false);
+		// }
+		// endHandler.call(this, e, i);
 	},
 	moveHandler = function (e) {
 		var ev = e || window.event;
 		ev.preventDefault();
 
 		if(ev.stopProgation) {
-			ev.stopProgation()
+			ev.stopProgation();
 		}else{
-			ev.cancelBubble = true
+			ev.cancelBubble = true;
 		}
-		
+		global.moveHandler = moveHandler;
+
 		var	center = global.center,	
 			startClient = global.startClient,
 			moAngle = global.moAngle,
@@ -147,37 +165,72 @@
 			},
 			curAngle = getAngleandLen(curClinet, center).angle,
 			startAngle = getAngleandLen(startClient, center).angle,
+
 			reAngle = getRealAngle(curAngle, startAngle);
 			moAngle = angle + curAngle - startAngle;
-			tableRotate.call(this, moAngle);
+			
+			tableRotate.call(this, moAngle);	
 			tableTransition.call(this, transition);
 		global.reAngle = reAngle;
 		global.moAngle = moAngle;
 		global.endClient = curClinet;
-		$(this).on(touchEnd, endHandler, false);
+
+		if(moAngle === 0) {
+			var index = e.target.index;
+			global.endHandler = function (e) {
+				endHandler.call(e.target, e, index);
+			}
+			$(e.target).on(touchEnd, global.endHandler, false);
+		}else{
+			global.endHandler = endHandler;
+			$(this).on(touchEnd, global.endHandler, false);	
+		}
+		global.isMove = true;
 	},
-	endHandler = function (e) {
+	endHandler = function (e, i) {
 		var ev = e || window.event;
 		ev.preventDefault();
 		var options = global.options,
 			angle = global.angle,
+			transition = global.options.transition,
 			blockNumber = options.blockNumber,
 			blockNumberIndex = options.blockNumberIndex,
 			wAngle, 
 			index,
 			angle1,
 			blockAngle,
+			clickAngle,
 			eachRotateAngle = options.eachRotateAngle;
+			
 		$(this).off(touchMove, moveHandler, false);
-		$(this).off(touchEnd, endHandler, false);
+		// $(this).off(touchEnd, args.callee, false);
 
 		angle += global.reAngle;
+
+		if(this.index !== undefined && typeof this.index === 'number'){
+			// 
+			angle = angle || 0;
+			if(this.index >= blockNumber / 2) {
+				clickAngle = -(blockNumber - this.index) * eachRotateAngle;
+			}else{
+				clickAngle = this.index * eachRotateAngle;
+			}
+			// angle = (angle + clickAngle) % 360;
+			// if(this.index == 0) angle = 0;
+			angle = clickAngle;
+
+			tableTransition.call(global.tar, transition); 
+		}
 		angle1 = angle - options.initAngle;
 		wAngle = angle1 % 360; 	
 		if(wAngle < 0) wAngle += 360;
 		index = Math.ceil(wAngle / eachRotateAngle);
 
-		tableRotate.call(this, angle);
+		tableRotate.call(global.tar, angle);
+
+		if(clickAngle){
+			angle = global.angle + clickAngle;
+		}
 		global.angle = angle;
 	
 		global.curIndex = index;
@@ -234,26 +287,46 @@
 			blockNumberIndex: true,
 			eachRotateAngle: 45,
 			transition: "",
-			onDraw: null
+			onDraw: null,
+			isReverse: false,
+			click: false,
+			clickTarget: null
 		},
 		tar = $(selector),
 		options = extend(defaults, opt),
 		moAngle = 0,
 		reAngle = 0,
 		angle = 0;
-
+		
 		global = {
 			self: this,
 			tar: tar.eles[0],
 			options: options,
 			moAngle: moAngle + options.initAngle,
 			reAngle: reAngle + options.initAngle,
-			angle: angle + options.initAngle
+			angle: angle + options.initAngle,
+			isReverse: options.isReverse,
+			isMove: undefined
+			// click: options.click,
+			// clickTarget: options.click && options.clickTarget
 		}
 
-		this.global = global;
-
 		setStyle.call(tar.eles[0]);
+
+		
+		// if(options.click && options.clickTarget) {
+		// 	for(var i = 0, l = options.clickTarget.length; i < l; i++) {
+		// 		// (function (i) {
+		// 		options.clickTarget[i].index = i;
+		// 		$(options.clickTarget[i]).on('click', function (e, i) {
+		// 			endHandler.call(this, e, i);
+		// 		} , false);
+		// 		// })(i);
+		// 	}
+		// }
+		for(var i = 0, l = options.clickTarget.length; i < l; i++) {
+			options.clickTarget[i].index = i;
+		}
 
 		tar.on(touchStart, startHandler, false);
 	};

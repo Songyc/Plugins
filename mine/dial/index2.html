@@ -11,6 +11,17 @@
 	.m-card{position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 3;}
 	/*.m-card>div{position: absolute;width: 69%; left: 16%; top: 12%;} */
 	.m-card>div{position:absolute;width:100%;height:100%;}
+
+	.tab-ctrl div{width:50px;height:50px;background:red;position:absolute;}
+	.block0{top:5px;left:160px;}
+	.block1{top:40px;left:60px;}
+	.block2{top:140px;left:20px;}
+	.block3{top:230px;left:60px;}
+	.block4{top:275px;left:150px;}
+	.block5{top:230px;left:250px;}
+	.block6{top:140px;left:290px;}
+	.block7{top:50px;left:260px;}
+
 	</style>
 </head>
 <body>
@@ -41,7 +52,16 @@
 			<img width="100%" height="100%" alt="" src="img/07.jpg" />
 		</div>
 	</div>
-	<div class="tab-ctrl" id="Jtab_ctrl"></div>
+	<div class="tab-ctrl" style="position:relative;" id="Jtab_ctrl">
+		<div class="block0">1</div>
+		<div class="block1">2</div>
+		<div class="block2">3</div>
+		<div class="block3">4</div>
+		<div class="block4">5</div>
+		<div class="block5">6</div>
+		<div class="block6">7</div>
+		<div class="block7">8</div>
+	</div>
 </div>
 <script>
 	var width = document.documentElement.clientWidth,
@@ -53,10 +73,12 @@
 </script>
 
 <!-- =================== 转盘控件Dial =================== -->
-<script src="js/dial.js"></script>
+<script src="js/dial2.js"></script>
 
 <script>
-	var arr = 1;
+	var arr = 1,
+		tar = document.getElementById('Jtab_ctrl'),
+		clickTarget = tar.getElementsByTagName('div');
 	var myDial = new Dial('#Jtab_ctrl',{
 		initAngle: 0,	//开始的旋转角度,缺省值为0。
 		eachRotateAngle: 45,	//最初每次的旋转角度,缺省值为45。
@@ -66,6 +88,7 @@
 		transition: "-webkit-transform .3s ease-in", //动画。
 		isReverse: false,
 		click: true,
+		clickTarget: clickTarget,
 		onDraw: function () {
 			var oJflip = document.getElementById('Jflip'),
 				aPerson = oJflip.getElementsByClassName('person'),

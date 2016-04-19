@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    #div{background: red;width:100px;height:100px;}
+    </style>
+</head>
+<body>
+    <div id="div">
+        123
+    </div>
+    <script>
+    var obj = {};
+    obj.arr = [0, 1, 2, 3, 4];
+    for(var i = 0, l = obj.arr.length; i < l; i++) {
+        console.log(obj.arr);
+        delete obj.arr;
+    }
+    </script>
+</body>
+</html>

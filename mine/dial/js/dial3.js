@@ -122,9 +122,23 @@
 		global.center = center;
 		global.startClient = startClient;	
 		
-		$(this).on(touchMove, moveHandler, false);
+		global.isMove = false;
+
+		global.moveHandler = function (ev) {
+			moveHandler.call(this, ev, ev.target);
+		}
+
+		global.endHandler = function (ev){
+			endHandler.call(this, ev, ev.target);
+		}
+		
+		$(this).on(touchMove, global.moveHandler, false);
+
+		
+		$(this).on(touchEnd, global.endHandler, false);	
+		
 	},
-	moveHandler = function (e) {
+	moveHandler = function (e, obj) {
 		var ev = e || window.event;
 		ev.preventDefault();
 
@@ -151,32 +165,68 @@
 			moAngle = angle + curAngle - startAngle;
 			tableRotate.call(this, moAngle);
 			tableTransition.call(this, transition);
+
 		global.reAngle = reAngle;
 		global.moAngle = moAngle;
 		global.endClient = curClinet;
-		$(this).on(touchEnd, endHandler, false);
+
+		global.isMove = true;
+
+		$(this).on(touchEnd, global.endHandler, false);
 	},
-	endHandler = function (e) {
+	getParent = function (obj) {
+		return obj.parentNode ? obj.parentNode : obj.parentElement;
+	},
+	clickTargetEvent = function (obj, angle, eachRotateAngle) {
+		var clickTargetAngle,
+			firstElementAngle = global.options.initAngle - 90,
+			objPar,
+			clickAngle;
+			console.log(obj);
+			if(obj !== global.tar) {
+				if(obj.index !== undefined && typeof obj.index === 'number'){
+					angle = angle || 0;
+					clickTargetAngle = getAngleandLen(global.startClient, global.center).angle;
+					if(clickTargetAngle >= 90) clickTargetAngle -=  360;
+					clickAngle = - (Math.round((clickTargetAngle - firstElementAngle) / eachRotateAngle) * eachRotateAngle);
+					angle +=clickAngle;
+					return angle;
+				}else{
+					objPar = getParent(obj);
+					angle = clickTargetEvent(objPar, angle, eachRotateAngle);
+				}
+			}
+		return angle;
+	},
+	endHandler = function (e, obj) {
 		var ev = e || window.event;
 		ev.preventDefault();
 		var options = global.options,
 			angle = global.angle,
+			transition = global.options.transition,
 			blockNumber = options.blockNumber,
 			blockNumberIndex = options.blockNumberIndex,
 			wAngle, 
 			index,
 			angle1,
 			blockAngle,
+			clickAngle,
+			clickTargetAngle,
 			eachRotateAngle = options.eachRotateAngle;
-		$(this).off(touchMove, moveHandler, false);
-		$(this).off(touchEnd, endHandler, false);
+		$(this).off(touchMove, global.moveHandler, false);
+		$(this).off(touchEnd, global.endHandler, false);
 
+		if(!global.isMove) {
+			angle = clickTargetEvent(obj, angle, eachRotateAngle);
+		}
 		angle += global.reAngle;
+
 		angle1 = angle - options.initAngle;
 		wAngle = angle1 % 360; 	
 		if(wAngle < 0) wAngle += 360;
 		index = Math.ceil(wAngle / eachRotateAngle);
 
+		tableTransition.call(global.tar, transition);
 		tableRotate.call(this, angle);
 		global.angle = angle;
 	
@@ -234,27 +284,31 @@
 			blockNumberIndex: true,
 			eachRotateAngle: 45,
 			transition: "",
-			onDraw: null
+			onDraw: null,
+			clickTarget: null,
 		},
 		tar = $(selector),
 		options = extend(defaults, opt),
 		moAngle = 0,
 		reAngle = 0,
 		angle = 0;
-
+		
 		global = {
 			self: this,
 			tar: tar.eles[0],
 			options: options,
 			moAngle: moAngle + options.initAngle,
 			reAngle: reAngle + options.initAngle,
-			angle: angle + options.initAngle
+			angle: angle + options.initAngle,
+			clickTarget: options.clickTarget
 		}
-
-		this.global = global;
-
 		setStyle.call(tar.eles[0]);
 
+		if(options.click && options.clickTarget) {
+			for(var i = 0, l = options.clickTarget.length; i < l; i++) {
+				options.clickTarget[i].index = i;
+			}
+		}
 		tar.on(touchStart, startHandler, false);
 	};
 	Dial.prototype = {
