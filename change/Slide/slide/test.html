@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+    <script src="http://js.3conline.com/min/temp/v1/lib-jquery1.4.2.js"></script>
+    <script src="js/jquery.slide.js"></script>
+</head>
+<body>
+    <!-- demo start -->
+    <div id="slide10" class="tab">
+        <div class="slide">
+            <ul>
+               <li><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/6.jpg" /><a href="#">只为赎罪</a></li>
+               <li><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/7.jpg" /><a href="#">残忍地对对待自己</a></li>
+               <li><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/8.jpg" /><a href="#">变形金刚4</a></li>
+               <li><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/9.jpg" /><a href="#">GFW终于倒下了</a></li>
+            </ul>
+        </div>
+        <div class="info">
+            <ul class="control" id ="slide10_control">
+                <li class="prev"><a href="#"><<</a></li>
+                <li><a href="#">01</a></li>
+                <li><a href="#">02</a></li>
+                <li><a href="#">03</a></li>
+                <li><a href="#">04</a></li>
+                <li class="next"><a href="#">>></a></li>
+             </ul>
+            <div class='title'></div>
+        </div>
+    </div>
+
+
+    <script>
+            $(function(){
+                var box = $('#slide10 .title');
+                new Slide({
+                    target: $('#slide10 .slide li'),
+                    control:  $('#slide10 .control li'),
+                    effect: 'slide',
+                    onchange: function(){
+                        var cur = this.target.eq(this.curPage).find('a');
+                        if(cur.length) box.html( '<strong><a href="'+ cur.attr( 'href' ) +'">'+ cur.text() +'</a></strong>');
+                    }
+                });
+            });
+    </script>
+    <style>
+        *{margin:0; padding:0;}
+        #slide10 {position:relative; width:540px;  border:1px solid #000; margin:0 50px 10px 0}
+        #slide10 .slide li {height:290px}
+        #slide10 .slide li a{display:none}
+        #slide10 .info {padding:5px; overflow:hidden}
+        #slide10 .control {float:right}
+        #slide10 .title {float:left}
+        #slide10 .control li {float:left; width:30px; list-style:none; text-align:center;}
+        #slide10 .control li a {text-decoration:none}
+        #slide10 .control a:hover, #slide10_control .current a{ background:green; color:#fff}
+        #slide10 ul {list-style:none}
+        #slide10 ul img {vertical-align:middle}
+        #slide10 .title a {color:blue; text-decoration:none}
+        #slide10 .title a:hover {text-decoration:underline}
+    </style>
+    <!-- demo end -->
+    <script>
+    var box = $('#slide10 .title');
+    new Slide({
+        target: $('#slide10 .slide li'),
+        control:  $('#slide10 .control li'),
+        effect: 'slide',
+        onchange: function(){
+            var cur = this.target.eq(this.curPage).find('a');
+            if(cur.length) box.html( '<strong><a href="'+ cur.attr( 'href' ) +'">'+ cur.text() +'</a></strong>');
+        }
+    });
+    </script>
+</body>
+</html>         

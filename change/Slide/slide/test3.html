@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <script src="http://js.3conline.com/min/temp/v1/lib-jquery1.4.2.js"></script>
+    <script src="js/jquery.slide.js"></script>
+</head> 
+<body>              
+    <!-- demo start -->
+    <div id="slide02" class="tab">
+        <div class="c" data-num="0"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/6.jpg" /></div>
+        <div class="c" data-num="1"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/7.jpg" /></div>
+        <div class="c" data-num="2"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/8.jpg" /></div>
+        <div class="c" data-num="3"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/9.jpg" /></div>
+        <div class="c" data-num="4"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/9.jpg" /></div>
+        <div class="c" data-num="5"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/9.jpg" /></div>
+        <div class="c" data-num="6"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/9.jpg" /></div>
+        <div class="c" data-num="7"><img src="http://zzsvn.pcauto.com.cn/svn/other/jslib/components/tab/images/9.jpg" /></div>
+        <ul class="control" id ="slide02_control">
+            <li class="prev"><a href="#">Prev</a></li>
+            <li><a href="#">01</a></li>
+            <li><a href="#">02</a></li>
+            <li><a href="#">03</a></li>
+            <li><a href="#">04</a></li>
+            <li><a href="#">05</a></li>
+            <li><a href="#">06</a></li>
+            <li><a href="#">07</a></li>
+            <li><a href="#">08</a></li>
+            <li class="next"><a href="#">Next</a></li>
+         </ul>                         
+    </div>
+    <div id="slide02_text"></div>
+   
+    <script>
+        $(function(){
+            var box = $('#slide02_text');
+            new Slide({
+                target: $('#slide02 .c'),
+                control:  $('#slide02 .control li'),
+                effect: 'slide',
+                direction: 'x',
+                merge: true
+            });     
+        });
+    </script> 
+    <style>
+        * {margin:0; padding:0;}
+
+        #slide02 {position:relative; width:540px; height:290px; border:1px solid #000; margin:0 50px 10px 0; overflow:hidden}
+        #slide02 .c {height:290px}
+        #slide02 .control {position:absolute; right:5px; top:35px; z-index:100; background-color:rgba(0,0,0,0.7); background:#000\9}
+        #slide02 .control li {list-style:none}
+        #slide02 .control a {position:relative; display:block; width:60px; height:24px; line-height:24px; text-align:center; text-decoration:none; color:#fff}
+        #slide02 .control a:hover, #slide02_control .current a{width:60px;  height:22px; line-height:22px; border:1px solid #000; background:yellow; color:#000}
+        #slide02 ul {list-style:none}
+        #slide02 ul img {vertical-align:middle}
+    </style>                           
+    <!-- demo end -->   
+</body>
+</html>         
