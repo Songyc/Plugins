@@ -380,6 +380,7 @@ j();return k;}});})(jQuery);
                     pos = ( to - this.plus ) * this.step;
                     console.log(pos);
                     console.log(
+                        "index: " + this.control[this.curPage % this.length].textContent + ", " +
                         "curPage: " + this.curPage + ", " +
                         "realCurPage: " + this.realCurPage + ", " +
                         "prevPage: " + this.prevPage + ", " + 
@@ -405,16 +406,17 @@ j();return k;}});})(jQuery);
             prevPage = this.prevPage,                                                           // 如果this.prevPage为undefined，说明是初始化的时候。将from为0，否则为this.prevPage。                              
             curPage = this.curPage,
             length = this.length;
-        if(realPlus > 0 || this.plus > 0) {                                                     // 滑动超过两屏,顺序打乱的情况
+        if( (this.plus > 0 && realPlus === 0) || (realPlus > 0) ) {                                                     // 滑动超过两屏时。刚超过两屏时, this.plus为1, 而this.realPlus为0, 所以this.plus > 0 && this.realPlus === 0的情况; 超过两屏后, this.realPlus 大于0, 但点击按钮时this.plus为负数。
             if(prevPage - to > length && to < length) {                                         // 说明用按钮来控制
                 
                 var across;
                 across = to - prevPage % length;
                 to += prevPage - prevPage % length;
 
-                var tarArr = $.makeArray( this.target ),
-                    num = Math.abs( across );
-                if(across > 0) {
+                if(across > 0 && plus > realPlus) {
+                    var tarArr = $.makeArray( this.target ),
+                        num = Math.abs( across );
+
                     for( var i = 0; i < num; i++ ){
                         var elem = tarArr.shift();
                         this.content.append( elem );
@@ -424,11 +426,16 @@ j();return k;}});})(jQuery);
                     this.realPlus = this.plus;
                     this.plus += across;
                     this.curPage = to;
+                    this.realCurPage = this.length * 2 - 1;
+                    this.realPrevPage = this.realCurPage - 1;
                     this.contentWrap[0][this.prop] -= num * this.step;
-                }else if(across < 0) {
-                    // this.realPlus = this.plus;
-                    // this.plus += across;
+
+                }else {
+                    this.plus = this.realPlus;
+                    this.realPlus -= 1;
                     this.curPage = to;
+                    this.realCurPage = this.length * 2 - 1;
+                    this.realPrevPage = this.realCurPage - 1;
                     // this.contentWrap[0][this.prop] = num * this.step;
                 } 
 
