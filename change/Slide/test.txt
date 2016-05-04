@@ -14,6 +14,7 @@ index: 6, curPage: 5, realCurPage: 5, prevPage: 4, realPrevPage: 4, plus: 0, rea
 index: 7, curPage: 6, realCurPage: 6, prevPage: 5, realPrevPage: 5, plus: 0, realPlus: undefined
 3780
 index: 8, curPage: 7, realCurPage: 7, prevPage: 6, realPrevPage: 6, plus: 0, realPlus: undefined
+
 4320
 index: 1, curPage: 8, realCurPage: 8, prevPage: 7, realPrevPage: 7, plus: 0, realPlus: undefined
 4860
@@ -30,7 +31,33 @@ index: 6, curPage: 13, realCurPage: 13, prevPage: 12, realPrevPage: 12, plus: 0,
 index: 7, curPage: 14, realCurPage: 14, prevPage: 13, realPrevPage: 13, plus: 0, realPlus: undefined
 8100
 index: 8, curPage: 15, realCurPage: 15, prevPage: 14, realPrevPage: 14, plus: 0, realPlus: undefined
+
 8100
 index: 1, curPage: 16, realCurPage: 15, prevPage: 15, realPrevPage: 14, plus: 1, realPlus: 0
 8100
 index: 2, curPage: 17, realCurPage: 15, prevPage: 16, realPrevPage: 14, plus: 2, realPlus: 1
+8100
+index: 3, curPage: 18, realCurPage: 15, prevPage: 17, realPrevPage: 14, plus: 3, realPlus: 2
+8100
+index: 4, curPage: 19, realCurPage: 15, prevPage: 18, realPrevPage: 14, plus: 4, realPlus: 3
+8100
+index: 5, curPage: 20, realCurPage: 15, prevPage: 19, realPrevPage: 14, plus: 5, realPlus: 4
+
+4320
+index: 1, curPage: 16, realCurPage: 15, prevPage: 20, realPrevPage: 14, plus: 5, realPlus: 4
+
+index: 1, curPage: 0, realCurPage: 0, prevPage: 20, realPrevPage: 20, plus: -15, realPlus: 5
+5940
+
+debug: scrollLeft, curPage, realCurPage, realPrevPage, plus, realPlus
+
+index: 1, curPage: 16, realCurPage: 10, prevPage: 17, realPrevPage: 11, plus: 6, realPlus: 5
+5400
+
+
+index: 1, curPage: 16, realCurPage: 15, prevPage: 15, realPrevPage: 14, plus: 1, realPlus: 0
+8100
+
+pos: 8100, index: 1, curPage: 16, realCurPage: 8, prevPage: 23, realPrevPage: 1, plus: 8, realPlus: 7
+
+pos: 4860, index: 1, curPage: 16, realCurPage: 8, prevPage: 17, realPrevPage: 9, plus: 8, realPlus: 7

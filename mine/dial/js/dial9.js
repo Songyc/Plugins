@@ -338,7 +338,7 @@
 
 	fn.extend(fn, {Prefix: Prefix, setCss: setCss, getCss: getCss});
 
-	// 缓存
+	// 缓存系统
 	var Cache = {};
 
 	fn.extend(Cache, {
@@ -410,7 +410,7 @@
 
 	fn.extend(fn, {Cache: Cache});
 
-	// 事件
+	// 事件系统
 	var Event = {};
 
 	fn.extend(Event, {
@@ -550,6 +550,7 @@
 	
 	fn.extend(fn, {Event: Event});
  	
+ 	// 象限模块
 	var Guadrant = {},
 		reverseObj = {
 			slide: {
@@ -655,7 +656,8 @@
 			return curAngle;
 		}
 	})
-
+	
+	// 事件处理模块
 	var Handler = {};
 
 	fn.extend(Handler, {
@@ -843,7 +845,7 @@
 	
 	fn.extend(fn, {Handler: Handler});
 
-	// 矩阵
+	// 矩阵模块
 	var Matrix = {},
 		rmatrix = /(-?\d\d*(?:\.\d\d*(?:e-)?\d*)?)/g;
 

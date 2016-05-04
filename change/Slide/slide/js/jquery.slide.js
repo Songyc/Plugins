@@ -378,8 +378,9 @@ j();return k;}});})(jQuery);
                 if( c.merge ){                                                                      // 计算移动的宽度
                     to = debug.call(this, to);
                     pos = ( to - this.plus ) * this.step;
-                    console.log(pos);
+
                     console.log(
+                        "pos: " + this.contentWrap[0][this.prop] + ", " + 
                         "index: " + this.control[this.curPage % this.length].textContent + ", " +
                         "curPage: " + this.curPage + ", " +
                         "realCurPage: " + this.realCurPage + ", " +
@@ -401,20 +402,28 @@ j();return k;}});})(jQuery);
         }
     }
     function debug(to) {
-        var plus = this.plus,
+        var curPage = this.curPage,
+            realCurPage = this.realCurPage,
+            prevPage = this.prevPage,                                                           
+            realPrevPage = this.realPrevPage,
+            plus = this.plus,
             realPlus = this.realPlus,
-            prevPage = this.prevPage,                                                           // 如果this.prevPage为undefined，说明是初始化的时候。将from为0，否则为this.prevPage。                              
-            curPage = this.curPage,
             length = this.length;
-        if( (this.plus > 0 && realPlus === 0) || (realPlus > 0) ) {                                                     // 滑动超过两屏时。刚超过两屏时, this.plus为1, 而this.realPlus为0, 所以this.plus > 0 && this.realPlus === 0的情况; 超过两屏后, this.realPlus 大于0, 但点击按钮时this.plus为负数。
-            if(prevPage - to > length && to < length) {                                         // 说明用按钮来控制
-                
-                var across;
-                across = to - prevPage % length;
-                to += prevPage - prevPage % length;
 
-                if(across > 0 && plus > realPlus) {
-                    var tarArr = $.makeArray( this.target ),
+        if( realPlus > 0 || (realPlus == 0 && plus > 0)) {                  // 前进到大于或等于两屏的情况, 此时this.plus会大于0; 而
+
+            if(prevPage - curPage > length) {                               // 点击按钮时
+
+                var prevPageRest, 
+                    across;
+
+                prevPageRest = prevPage % length;                           // 余数    
+                across = to - prevPageRest;                                 // 跨步数
+
+                if(prevPageRest < to) {                                     // 增加plus的情况, 说明当前按钮益比上一次要后
+                    to += prevPage - prevPageRest;                          // 重新计算to
+
+                    var tarArr = $.makeArray( this.target ),                // 增加plus需要把第一个节点剪切到最后
                         num = Math.abs( across );
 
                     for( var i = 0; i < num; i++ ){
@@ -423,22 +432,49 @@ j();return k;}});})(jQuery);
                         this.target = this.content.children();
                     }
 
-                    this.realPlus = this.plus;
-                    this.plus += across;
-                    this.curPage = to;
+                    this.curPage = to;                                      // 修正this的六大属性  
                     this.realCurPage = this.length * 2 - 1;
                     this.realPrevPage = this.realCurPage - 1;
+                    this.plus += across;
+                    this.realPlus = this.plus - 1;
                     this.contentWrap[0][this.prop] -= num * this.step;
 
-                }else {
-                    this.plus = this.realPlus;
-                    this.realPlus -= 1;
-                    this.curPage = to;
-                    this.realCurPage = this.length * 2 - 1;
-                    this.realPrevPage = this.realCurPage - 1;
-                    // this.contentWrap[0][this.prop] = num * this.step;
-                } 
+                }else if(prevPageRest > to){                                // plus不动的情况, 说明当前按钮位置比上一次要前
+                    to += prevPage - prevPageRest;                          // 重新计算to
 
+                    this.curPage = to;
+                    this.realCurPage = this.length * 2 - 1 + across;
+                    this.realPrevPage = this.length * 2 + across;
+                    this.plus = this.realPlus;
+                    this.realPlus = this.plus - 1;
+                    this.contentWrap[0][this.prop] = this.contentWrap[0][this.prop];
+                }
+
+                // if(across > 0 && plus > realPlus) {
+                //     var tarArr = $.makeArray( this.target ),
+                //         num = Math.abs( across );
+
+                //     for( var i = 0; i < num; i++ ){
+                //         var elem = tarArr.shift();
+                //         this.content.append( elem );
+                //         this.target = this.content.children();
+                //     }
+
+                //     this.realPlus = this.plus;
+                //     this.plus += across;
+                //     this.curPage = to;
+                //     this.realCurPage = this.length * 2 - 1;
+                //     this.realPrevPage = this.realCurPage - 1;
+                //     this.contentWrap[0][this.prop] -= num * this.step;
+
+                // }else {
+                //     this.plus = this.realPlus;
+                //     this.realPlus -= 1;
+                //     this.curPage = to;
+                //     this.realCurPage = this.length * 2 - 1;
+                //     this.realPrevPage = this.realCurPage - 1;
+                //     // this.contentWrap[0][this.prop] = num * this.step;
+                // } 
             }
         }else if(realPlus < 0) {
             if(to > 0 && to < length) {
