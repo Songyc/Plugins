@@ -475,7 +475,7 @@
 		},
 		Enter: function () {
 			var On_Enter = function (event) {
-				var ev - window.event || event;
+				var ev = window.event || event;
 				if(ev.keyCode === EventKeyCode.Enter) {
 					var console = self.console || new Console();
 					console.show();
@@ -543,7 +543,6 @@
 	// enter();
 
 })(window);
-
 
 </script>
 </body>

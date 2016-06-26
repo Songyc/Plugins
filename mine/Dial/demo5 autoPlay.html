@@ -8,7 +8,7 @@
     body{margin:0 auto;padding:0 auto;overflow: hidden;}
     .doc{height: 1200px;}
     .tab-ctrl {position: absolute;width: 576px;height: 576px;   border-radius: 50%;border:2px solid #414141;}
-    .tab-ctrl2{top:150%;}
+    .tab-ctrl2{left:55%;}
     .tab-ctrl:before {  content: 'S'; font-size: 320px; background: #ffdf42; width: 63%; height: 63%; position: absolute; left: 50%; margin-left: -31.5%; bottom: 19%; border-radius: 50%; text-align: center;}
     .tab-ctrl .block{width:164px;height:164px;position:absolute;background: rgba(255, 223, 66, 0.5);border-radius:50%;font-size: 40px;line-height: 164px;text-align: center;}
     .tab-ctrl .block.cur{background: rgba(255, 223, 66, 1); font-size:80px;}
@@ -41,21 +41,11 @@
         <div class="block">8</div>
     </div>
 
-    <div class="tab-ctrl tab-ctrl2" id="Jtab_ctrl2">
-        <div class="block">1</div>
-        <div class="block">2</div>
-        <div class="block">3</div>
-        <div class="block">4</div>
-        <div class="block">5</div>
-        <div class="block">6</div>
-        <div class="block">7</div>
-        <div class="block">8</div>
-    </div>
 </div>
 
 
 <!-- =================== 转盘控件Dial =================== -->
-<script src="js/dial13.js"></script>
+<script src="js/dial.js"></script>
 <script>
 var width = document.documentElement.clientWidth,
         height = document.documentElement.clientHeight,
@@ -65,27 +55,17 @@ var width = document.documentElement.clientWidth,
 </script>
 <script>
         myDial = new Dial('#Jtab_ctrl',{
-            // blockNumber: 8,                                     //旋转分块,缺省值为8。
             transition: "-webkit-transform .3s ease-in",        //动画。
             clickClass: "#Jtab_ctrl .block",
             click: true,
             radius: 290,                                        //每个按钮到圆中心的距离，一般取半径长。
             curBlockChange: true,               
-            consistentAngle: true,                              //块元素是否跟各自的角度一致, 该参数为true时curBlockChange无效
-            initAngle: -135, 
+            consistentAngle: true,                             //块元素是否跟各自的角度一致, 该参数为true时curBlockChange无效
+            initAngle: 0, 
             position: "center center",
-            onChange: function () {},
+            autoPlay: true
         });
 
-        // myDial2 = new Dial('#Jtab_ctrl2',{
-        //     blockNumber: 8,                                     //旋转分块,缺省值为8。
-        //     transition: "-webkit-transform .3s ease-in",        //动画。
-        //     clickClass: "#Jtab_ctrl2 .block",
-        //     radius: 290,                                        //每个按钮到圆中心的距离，一般取半径长。
-        //     curBlockChange: true,               
-        //     consistentAngle: true,                              //块元素是否跟各自的角度一致, 该参数为true时curBlockChange无效
-        //     onChange: function () {}
-        // });
 </script>
 </body>
 </html>
