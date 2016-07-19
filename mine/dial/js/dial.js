@@ -36,7 +36,7 @@
 		var args = Array.prototype.slice.call(arguments), k,
 			argsL = args.length,
 			deep = args[argsL - 1], 						// 获取最后一个参数, 赋值给deep
-			isObject = oToString.call(deep) === '[object Object]',  		// 判断deep是不是布尔型
+			isObject = oToString.call(deep) === '[object Object]',  		// 判断deep是不是对象
 			opts, optsL;
 		if(!opt)  return defaults;							// 如果参数opt不存在, 返回参数defaults 				
 		optsL = isObject ? argsL - 1 : argsL - 2;			// 如果deep为布尔, 则参数opts的个数为argsL - 2; 否则为argsL - 1。
@@ -215,6 +215,7 @@
 				var width, height;
 					width = fn.stringToNumber(getCss.getComputedStyle(el, 'width'));
 					height = fn.stringToNumber(getCss.getComputedStyle(el, 'height'));
+					
 				if(index === 0) {
 					el.className += " cur";
 				}
@@ -307,6 +308,7 @@
 		getAngleAndLen: function (obj, center) { 					// getCss.getAngleAndLen(obj, center)方法返回参数obj与参数center两个坐标点之间的角度和长度
 			var disX = obj.x - center.x,
 				disY = obj.y - center.y;
+
 			return {
 				angle: Math.round(Math.atan2(disY, disX) * 180 / Math.PI),
 				length: Math.ceil(Math.sqrt(disX * disX + disY * disY))
