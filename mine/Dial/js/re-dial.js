@@ -13,7 +13,6 @@
 		_hasOwn = Object.prototype.hasOwnProperty,
 		_toString = Object.prototype.toString;
 
-
 	function extend(target, src) {
 		var args = _slice.call(arguments),
 			len = args.length,
@@ -49,48 +48,6 @@
 		}
 		return target;
 	}
-	
-
-	var get = {
-		center: function (el) { 									// getCss.getCenterPos(el)方法返回参数el的中心坐标
-			var gbcr = el.getBoundingClientRect(el);
-
-			return {
-				x: gbcr.right - gbcr.width / 2,
-				y: gbcr.bottom - gbcr.height / 2
-			}
-		},
-		angle: function (point, center) {
-			var dX = point.x - center.x,
-				dY = point.y - center.y;
-				
-			return Math.round(Math.atan2(dY, dX) * 180 / Math.PI);
-		},
-		len: function (point, center) {
-			var dX = point.x - center.x,
-				dY = point.y - center.y;
-
-			return Math.ceil(Math.sqrt(dX * dX + dY * dY));
-		}
-	}
-
-	function isClicked(e) {
-		var that = this,
-			block = that.block,
-			el = e.target, ct;
-	
-		for(var i = 0, l = block.length; i < l; i++) {
-			if( (ct = block[i]) && (ct === el || ct.contains(el)) && !that.isTouchMove) {
-				return true;
-			}
-		}
-	
-		return false;
-	}
-
-	function countAngle() {
-
-	}
 
 	window.Dial = function (options) {
 	 	this.config = extend({}, Dial.config, options);
@@ -102,7 +59,8 @@
 		block: null,
 		eachAngle: 0,
 		radius: 0,
-		click: true
+		click: true,
+		position: null
 	}
 
 	Dial.prototype = {
@@ -134,7 +92,11 @@
 
 				this.dialInitAngle = c.initAngle - 90;
 
+				this.angle = this.initAngle;
+
 				this._rotate(c.initAngle);	
+
+				this._position(el);
 
 				if(cb) {
 					var width, height, 
@@ -169,6 +131,7 @@
 
 						ele.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
 						ele.style.webkitTransform = 'translate(' + x + 'px, ' + y + 'px)';
+						
 					}
 
 					c.eachAngle = eachAngle;
@@ -176,6 +139,32 @@
 
 				this._bind(touchstart);
 			}
+		},
+
+		_position: function (el) {
+			var p = this.config.position,
+				pi, pos, t;
+
+			pos = {
+				left: "0%",
+				right: "100%",
+				top: '0%',
+				bottom: '100%',
+				center: '50%'
+			};
+
+			p = p.trim().split(' ');
+
+			if(/^(t|b)/.test(p[0])) {
+				t = p[0];
+				p[0] = p[1];
+				p[1] = t;
+			}
+
+			el.style.left = pos[p[0]];
+			el.style.top = pos[p[1]];
+			el.style.marginLeft = -(el.clientWidth / 2) + 'px';
+			el.style.marginTop = -(el.clientHeight / 2) + 'px';
 		},
 
 		_bind: function (type, el, bubble){
@@ -254,7 +243,7 @@
 		_end: function (e) {
 			var point = hasTouch ? ( e.touches[0] ? e.touches[0] : e.changedTouches[0] ) : e,
 				c = this.config,
-				angle = this.angle || c.initAngle,
+				angle = this.angle,
 				ct = c.block, l, eAngle,
 				slideAngle = this.slideAngle || 0,
 				eachAngle = c.eachAngle,
@@ -316,6 +305,7 @@
 		initAngle: 0,
 		block: '#Jtab_ctrl .block',
 		radius: 300,
-		click: false
+		click: false,
+		position: 'center center'
 	})
 })(this);
